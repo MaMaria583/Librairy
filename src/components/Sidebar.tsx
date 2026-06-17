@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, type ElementType } from "react";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -16,13 +17,12 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 type NavItem = {
   label: string;
   href?: string;
-  icon: React.ElementType;
-  children?: { label: string; href: string; icon: React.ElementType }[];
+  icon: ElementType;
+  children?: { label: string; href: string; icon: ElementType }[];
 };
 
 const navItems: NavItem[] = [
