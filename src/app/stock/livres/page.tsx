@@ -1,7 +1,7 @@
 import { getProducts } from "@/lib/actions/products";
 import { getSuppliers } from "@/lib/actions/suppliers";
 import { ProductsTable } from "@/components/stock/ProductsTable";
-import { BookOpen, Plus } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
