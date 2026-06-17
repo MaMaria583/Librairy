@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { Supplier } from "@prisma/client";
 import { Plus, Edit2, Trash2, Phone, Mail, MapPin, Package } from "lucide-react";
 import { createSupplier, updateSupplier, deleteSupplier } from "@/lib/actions/suppliers";
@@ -31,7 +31,7 @@ export function SuppliersClient({ suppliers }: Props) {
     setShowModal(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
       const data = {

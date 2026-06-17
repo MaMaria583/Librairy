@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { Product, Supplier, ProductType } from "@prisma/client";
 import { X } from "lucide-react";
 import { createProduct, updateProduct } from "@/lib/actions/products";
@@ -36,7 +36,7 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
       const data = {
