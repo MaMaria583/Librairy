@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GestionLibrairy - Librairie & Papeterie",
-  description: "Application de gestion de librairie et papeterie",
+  title: "La Librairie",
+  description: "Librairie en ligne et application de gestion",
 };
 
 export default function RootLayout({
@@ -27,14 +26,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex h-screen overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 overflow-y-auto bg-slate-50">
-            {children}
-          </main>
-        </div>
+        {children}
       </body>
     </html>
   );

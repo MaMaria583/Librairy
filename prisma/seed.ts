@@ -185,9 +185,12 @@ async function main() {
   for (const livre of livres) {
     await prisma.product.upsert({
       where: { id: livre.id },
-      update: {},
+      update: {
+        imageUrl: `https://covers.openlibrary.org/b/isbn/${livre.isbn}-L.jpg`
+      },
       create: {
         ...livre,
+        imageUrl: `https://covers.openlibrary.org/b/isbn/${livre.isbn}-L.jpg`,
         type: ProductType.LIVRE,
       },
     });
