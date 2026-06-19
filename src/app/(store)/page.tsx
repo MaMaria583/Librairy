@@ -29,7 +29,7 @@ export default async function StoreHomePage() {
   const gridBooks = featuredBooks.slice(0, 4);
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col">
 
       {/* ── Hero Slider (static 3 cards) ── */}
       <section className="container mx-auto px-6 lg:px-10 py-8">
@@ -91,7 +91,7 @@ export default async function StoreHomePage() {
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="flex items-center gap-3 bg-white border border-slate-100 rounded-xl px-5 py-4 hover:shadow-md transition-all group"
+                className="flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-pink-100 rounded-xl px-5 py-4 hover:shadow-md transition-all group"
               >
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full ${cat.color} shrink-0`}>
                   <Icon className="w-5 h-5" />
@@ -107,7 +107,7 @@ export default async function StoreHomePage() {
       </section>
 
       {/* ── Featured ── */}
-      <section className="container mx-auto px-6 lg:px-10 py-10">
+      <section className="container mx-auto px-6 lg:px-10 py-10 bg-white/60 backdrop-blur-sm mx-4 lg:mx-auto rounded-3xl mb-8">
         <h2 className="text-2xl font-bold text-center text-slate-900 mb-8">Featured</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
           {gridBooks.map((book) => (

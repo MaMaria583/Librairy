@@ -9,7 +9,7 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-pink-100">
       <div className="container mx-auto px-6 lg:px-10">
         <div className="flex h-16 items-center justify-between">
 
