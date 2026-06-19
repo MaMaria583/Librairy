@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import { Star } from "lucide-react";
 
 export interface BookProps {
   id: string;
@@ -12,37 +13,43 @@ export interface BookProps {
 
 export function BookCard({ book }: { book: BookProps }) {
   return (
-    <div className="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
-      <Link href={`/livres/${book.id}`} className="relative aspect-[2/3] overflow-hidden bg-slate-100 flex items-center justify-center">
+    <Link href={`/livres/${book.id}`} className="group flex flex-col w-40 sm:w-48 shrink-0 bg-white border border-slate-100 rounded-lg p-3 hover:shadow-lg transition-all duration-300">
+      <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-50 flex items-center justify-center mb-3 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] rounded-md">
         {book.imageUrl ? (
-          <img src={book.imageUrl} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <Image
+            src={book.imageUrl}
+            alt={book.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 640px) 160px, 192px"
+          />
         ) : (
-          <div className="text-slate-400 font-medium text-center p-4">
+          <div className="text-slate-400 text-xs font-medium text-center p-2">
             Couverture non disponible
           </div>
         )}
-        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-xs font-bold px-3 py-1 rounded-full text-blue-600 shadow-sm">
-          {book.genre || "Livre"}
-        </div>
-      </Link>
+      </div>
       
-      <div className="p-5 flex flex-col flex-1">
-        <Link href={`/livres/${book.id}`} className="flex-1">
-          <h3 className="font-bold text-slate-900 line-clamp-2 hover:text-blue-600 transition-colors">
-            {book.title}
-          </h3>
-          <p className="text-sm text-slate-500 mt-1">{book.author || "Auteur inconnu"}</p>
-        </Link>
+      <div className="flex flex-col flex-1 text-left">
+        <h3 className="font-bold text-slate-900 text-sm leading-tight line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors">
+          {book.title}
+        </h3>
+        <p className="text-xs text-slate-500 mb-2 truncate">{book.author || "Auteur inconnu"}</p>
         
-        <div className="mt-5 flex items-center justify-between">
-          <span className="text-xl font-extrabold text-slate-900">
+        <div className="mt-auto flex items-center justify-between">
+          <span className="text-sm font-extrabold text-slate-900">
             {book.price.toFixed(2).replace('.', ',')} €
           </span>
-          <button className="bg-slate-100 text-blue-600 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-colors" title="Ajouter au panier">
-            <ShoppingCart className="h-5 w-5" />
-          </button>
+          <div className="flex items-center">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star 
+                key={star} 
+                className={`w-3 h-3 ${star <= 4 ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`} 
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

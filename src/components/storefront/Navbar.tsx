@@ -1,65 +1,47 @@
 import Link from "next/link";
-import { Search, ShoppingCart, User, Menu, BookOpen } from "lucide-react";
+import { Search, ShoppingCart, User, BookOpen } from "lucide-react";
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-      {/* Top Banner */}
-      <div className="bg-blue-600 text-white text-xs py-2 text-center font-medium tracking-wide">
-        Livraison gratuite à partir de 35€ d&apos;achat - Retrait gratuit en librairie
-      </div>
-      
-      {/* Main Navbar */}
+    <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4 md:gap-8">
+        <div className="flex h-20 items-center justify-between gap-4 md:gap-12">
           
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-blue-800 tracking-tight">
-            <BookOpen className="h-8 w-8 text-blue-600" />
-            <span className="hidden sm:inline-block">LaLibrairie</span>
+          <Link href="/" className="flex items-center gap-3 font-extrabold text-2xl text-slate-900 tracking-tight shrink-0">
+            <div className="relative flex items-center justify-center text-slate-800">
+              <BookOpen className="h-9 w-9" />
+              <div className="absolute inset-y-0 w-0.5 bg-blue-600 left-1/2 -translate-x-1/2 h-full z-10"></div>
+            </div>
+            <span className="hidden sm:inline-block tracking-widest text-slate-800 uppercase">Librium</span>
           </Link>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl hidden md:flex items-center relative">
+          <div className="flex-1 max-w-3xl hidden md:flex items-center relative">
+            <Search className="absolute left-4 h-5 w-5 text-slate-400" />
             <input 
               type="search"
               placeholder="Rechercher par titre, auteur, ISBN..."
-              className="w-full h-10 pl-4 pr-10 rounded-full border border-slate-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full h-12 pl-12 pr-4 rounded-full border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent text-sm"
             />
-            <button className="absolute right-3 text-slate-500 hover:text-blue-600">
-              <Search className="h-5 w-5" />
-            </button>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
-            <button className="md:hidden text-slate-600">
+          <div className="flex items-center gap-6 shrink-0 text-slate-700">
+            <button className="md:hidden hover:text-slate-900 transition-colors">
               <Search className="h-6 w-6" />
             </button>
-            <Link href="/compte" className="flex flex-col items-center text-slate-600 hover:text-blue-600 transition-colors">
-              <User className="h-6 w-6" />
-              <span className="text-[10px] uppercase font-semibold mt-1 hidden sm:block">Compte</span>
+            <Link href="/compte" className="hover:text-slate-900 transition-colors p-2">
+              <User className="h-7 w-7" />
             </Link>
-            <Link href="/panier" className="flex flex-col items-center text-slate-600 hover:text-blue-600 transition-colors relative">
-              <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
-              <span className="text-[10px] uppercase font-semibold mt-1 hidden sm:block">Panier</span>
+            <Link href="/panier" className="hover:text-slate-900 transition-colors relative p-2">
+              <ShoppingCart className="h-7 w-7" />
+              <span className="absolute top-1 right-0 bg-slate-900 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white">
+                0
+              </span>
             </Link>
           </div>
         </div>
-
-        {/* Categories Nav */}
-        <nav className="hidden md:flex items-center gap-6 py-3 border-t text-sm font-semibold text-slate-700 overflow-x-auto">
-          <button className="flex items-center gap-2 hover:text-blue-600 transition-colors shrink-0">
-            <Menu className="h-5 w-5" />
-            Tous les rayons
-          </button>
-          <Link href="/livres?rayon=litterature" className="hover:text-blue-600 transition-colors shrink-0">Littérature</Link>
-          <Link href="/livres?rayon=bd-mangas" className="hover:text-blue-600 transition-colors shrink-0">BD, mangas</Link>
-          <Link href="/livres?rayon=jeunesse" className="hover:text-blue-600 transition-colors shrink-0">Jeunesse</Link>
-          <Link href="/livres?rayon=vie-pratique" className="hover:text-blue-600 transition-colors shrink-0">Vie pratique, bien-être</Link>
-          <Link href="/livres?rayon=sciences-humaines" className="hover:text-blue-600 transition-colors shrink-0">Sciences humaines</Link>
-        </nav>
       </div>
     </header>
   );
