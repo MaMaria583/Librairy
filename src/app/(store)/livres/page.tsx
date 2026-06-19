@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BookCard } from "@/components/storefront/BookCard";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
@@ -44,12 +45,12 @@ export default async function LivresPage({
               <Filter className="h-5 w-5" /> Filtrer par rayon
             </h3>
             <ul className="space-y-3 text-sm text-slate-600">
-              <li><a href="/livres" className={`hover:text-blue-600 ${!rayon ? 'font-bold text-blue-600' : ''}`}>Tous les livres</a></li>
-              <li><a href="/livres?rayon=litterature" className={`hover:text-blue-600 ${rayon === 'litterature' ? 'font-bold text-blue-600' : ''}`}>Littérature</a></li>
-              <li><a href="/livres?rayon=bd" className={`hover:text-blue-600 ${rayon === 'bd' ? 'font-bold text-blue-600' : ''}`}>BD & Mangas</a></li>
-              <li><a href="/livres?rayon=jeunesse" className={`hover:text-blue-600 ${rayon === 'jeunesse' ? 'font-bold text-blue-600' : ''}`}>Jeunesse</a></li>
-              <li><a href="/livres?rayon=vie-pratique" className={`hover:text-blue-600 ${rayon === 'vie-pratique' ? 'font-bold text-blue-600' : ''}`}>Vie pratique</a></li>
-              <li><a href="/livres?rayon=sciences-humaines" className={`hover:text-blue-600 ${rayon === 'sciences-humaines' ? 'font-bold text-blue-600' : ''}`}>Sciences humaines</a></li>
+              <li><Link href="/livres" className={`hover:text-blue-600 ${!rayon ? 'font-bold text-blue-600' : ''}`}>Tous les livres</Link></li>
+              <li><Link href="/livres?rayon=litterature" className={`hover:text-blue-600 ${rayon === 'litterature' ? 'font-bold text-blue-600' : ''}`}>Littérature</Link></li>
+              <li><Link href="/livres?rayon=bd" className={`hover:text-blue-600 ${rayon === 'bd' ? 'font-bold text-blue-600' : ''}`}>BD & Mangas</Link></li>
+              <li><Link href="/livres?rayon=jeunesse" className={`hover:text-blue-600 ${rayon === 'jeunesse' ? 'font-bold text-blue-600' : ''}`}>Jeunesse</Link></li>
+              <li><Link href="/livres?rayon=vie-pratique" className={`hover:text-blue-600 ${rayon === 'vie-pratique' ? 'font-bold text-blue-600' : ''}`}>Vie pratique</Link></li>
+              <li><Link href="/livres?rayon=sciences-humaines" className={`hover:text-blue-600 ${rayon === 'sciences-humaines' ? 'font-bold text-blue-600' : ''}`}>Sciences humaines</Link></li>
             </ul>
           </div>
         </div>
@@ -84,7 +85,7 @@ export default async function LivresPage({
         ) : (
           <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
             <p className="text-lg text-slate-500 font-medium">Aucun livre ne correspond à votre recherche.</p>
-            <a href="/livres" className="mt-4 inline-block text-blue-600 hover:underline">Voir tous les livres</a>
+            <Link href="/livres" className="mt-4 inline-block text-blue-600 hover:underline">Voir tous les livres</Link>
           </div>
         )}
       </main>
