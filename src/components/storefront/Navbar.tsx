@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
 
 export function Navbar() {
@@ -14,8 +15,19 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="text-2xl font-black text-slate-900 tracking-tight uppercase shrink-0">
-            DAR ELHIKMAH
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <Image
+              src="/images/logo.png"
+              alt="DAR ELHIKMA - Librairie et Papeterie"
+              width={48}
+              height={48}
+              className="object-contain"
+              priority
+            />
+            <div className="hidden sm:flex flex-col leading-none">
+              <span className="text-lg font-black text-[#1e3a5f] tracking-widest uppercase">DAR ELHIKMA</span>
+              <span className="text-[9px] tracking-[0.18em] text-[#b8960c] font-semibold uppercase">Librairie &amp; Papeterie</span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}

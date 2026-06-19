@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Facebook, Instagram, Twitter } from "lucide-react";
+import Image from "next/image";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
@@ -8,9 +9,18 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-slate-800 pb-8">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-white tracking-tight">
-              <BookOpen className="h-8 w-8 text-[#c0392b]" />
-              <span>Librairie DAR ELHIKMAH</span>
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/images/logo.png"
+                alt="DAR ELHIKMA"
+                width={44}
+                height={44}
+                className="object-contain brightness-0 invert"
+              />
+              <div className="flex flex-col leading-none">
+                <span className="text-lg font-black text-white tracking-widest uppercase">DAR ELHIKMA</span>
+                <span className="text-[9px] tracking-[0.15em] text-[#d4a84b] font-semibold uppercase">Librairie &amp; Papeterie</span>
+              </div>
             </Link>
             <p className="text-sm text-slate-400">
               Votre librairie en ligne de confiance. Découvrez des milliers de références de livres, BD, mangas, et plus encore.
@@ -57,7 +67,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Librairie DAR ELHIKMAH. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} DAR ELHIKMA - Librairie &amp; Papeterie. Tous droits réservés.</p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <Link href="/cgv" className="hover:text-slate-300 transition-colors">CGV</Link>
             <Link href="/confidentialite" className="hover:text-slate-300 transition-colors">Politique de confidentialité</Link>
