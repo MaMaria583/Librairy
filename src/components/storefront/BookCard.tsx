@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Star } from "lucide-react";
 
 export interface BookProps {
   id: string;
@@ -12,42 +11,46 @@ export interface BookProps {
 }
 
 export function BookCard({ book }: { book: BookProps }) {
+  const imageSrc = book.imageUrl || `https://covers.openlibrary.org/b/isbn/${book.title}-L.jpg`;
+
   return (
-    <Link href={`/livres/${book.id}`} className="group flex flex-col w-40 sm:w-48 shrink-0 bg-white border border-slate-100 rounded-lg p-3 hover:shadow-lg transition-all duration-300">
-      <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-50 flex items-center justify-center mb-3 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.1)] rounded-md">
+    <Link
+      href={`/livres/${book.id}`}
+      className="group flex flex-col bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-100"
+    >
+      {/* Cover */}
+      <div className="relative aspect-[2/3] w-full overflow-hidden bg-slate-100">
         {book.imageUrl ? (
           <Image
-            src={book.imageUrl}
+            src={imageSrc}
             alt={book.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 640px) 160px, 192px"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
           />
         ) : (
-          <div className="text-slate-400 text-xs font-medium text-center p-2">
+          <div className="flex items-center justify-center h-full text-slate-400 text-xs font-medium text-center p-4">
             Couverture non disponible
           </div>
         )}
+        {/* Subtle overlay on hover */}
+        <div className="absolute inset-0 bg-[#1e3a5f]/0 group-hover:bg-[#1e3a5f]/10 transition-colors duration-300" />
       </div>
-      
-      <div className="flex flex-col flex-1 text-left">
-        <h3 className="font-bold text-slate-900 text-sm leading-tight line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors">
+
+      {/* Info */}
+      <div className="flex flex-col flex-1 p-3 text-left">
+        <h3 className="font-semibold text-slate-900 text-sm leading-tight line-clamp-2 mb-1 group-hover:text-[#1e3a5f] transition-colors min-h-[2.5rem]">
           {book.title}
         </h3>
         <p className="text-xs text-slate-500 mb-2 truncate">{book.author || "Auteur inconnu"}</p>
-        
-        <div className="mt-auto flex items-center justify-between">
-          <span className="text-sm font-extrabold text-slate-900">
+
+        <div className="mt-auto flex items-center justify-between pt-2 border-t border-slate-50">
+          <span className="text-base font-bold text-[#c0392b]">
             {book.price.toFixed(2).replace('.', ',')} €
           </span>
-          <div className="flex items-center">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star 
-                key={star} 
-                className={`w-3 h-3 ${star <= 4 ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`} 
-              />
-            ))}
-          </div>
+          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
+            {book.genre || "Livre"}
+          </span>
         </div>
       </div>
     </Link>

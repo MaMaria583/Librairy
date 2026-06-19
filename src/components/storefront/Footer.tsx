@@ -9,8 +9,8 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-2xl text-white tracking-tight">
-              <BookOpen className="h-8 w-8 text-blue-500" />
-              <span>LaLibrairie</span>
+              <BookOpen className="h-8 w-8 text-[#c0392b]" />
+              <span>Librairie L&apos;Harmonie</span>
             </Link>
             <p className="text-sm text-slate-400">
               Votre librairie en ligne de confiance. Découvrez des milliers de références de livres, BD, mangas, et plus encore.
@@ -57,7 +57,7 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} LaLibrairie. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} Librairie L&apos;Harmonie. Tous droits réservés.</p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <Link href="/cgv" className="hover:text-slate-300 transition-colors">CGV</Link>
             <Link href="/confidentialite" className="hover:text-slate-300 transition-colors">Politique de confidentialité</Link>
