@@ -15,7 +15,7 @@ export function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="text-2xl font-black text-slate-900 tracking-tight uppercase shrink-0">
-            Livres
+            DAR ELHIKMAH
           </Link>
 
           {/* Desktop Nav */}
