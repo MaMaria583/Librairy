@@ -15,11 +15,19 @@ export default async function LivresPage({
   // Build the query
   const whereClause: Prisma.ProductWhereInput = { type: "LIVRE" };
   
-  if (rayon) {
-    if (rayon === "litterature") whereClause.genre = { contains: "littérature", mode: "insensitive" };
-    else if (rayon === "bd-mangas" || rayon === "bd") whereClause.genre = { contains: "bd", mode: "insensitive" };
-    else if (rayon === "jeunesse") whereClause.genre = { contains: "jeunesse", mode: "insensitive" };
-    else whereClause.genre = { contains: rayon.replace('-', ' '), mode: "insensitive" };
+  const RAYONS: Record<string, string> = {
+    roman: "roman",
+    "developpement-personnel": "développement personnel",
+    jeunesse: "jeunesse",
+    "bd-mangas": "bd",
+    art: "art",
+    fourniture: "fourniture",
+    autres: "autres",
+    education: "éducation",
+  };
+
+  if (rayon && RAYONS[rayon]) {
+    whereClause.genre = { contains: RAYONS[rayon], mode: "insensitive" };
   }
 
   if (q) {
@@ -44,13 +52,31 @@ export default async function LivresPage({
             <h3 className="font-bold text-base flex items-center gap-2 mb-4 text-[#1e3a5f] border-b border-pink-100 pb-3">
               <Filter className="h-4 w-4" /> Filtrer par rayon
             </h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/livres" className={`block px-3 py-2 rounded-lg transition-colors ${!rayon ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Tous les livres</Link></li>
-              <li><Link href="/livres?rayon=litterature" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'litterature' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Littérature</Link></li>
-              <li><Link href="/livres?rayon=bd" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'bd' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>BD &amp; Mangas</Link></li>
-              <li><Link href="/livres?rayon=jeunesse" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'jeunesse' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Jeunesse</Link></li>
-              <li><Link href="/livres?rayon=vie-pratique" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'vie-pratique' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Vie pratique</Link></li>
-              <li><Link href="/livres?rayon=sciences-humaines" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'sciences-humaines' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Sciences humaines</Link></li>
+            <ul className="space-y-1.5 text-sm">
+              {[
+                { slug: "", label: "Tous les livres" },
+                { slug: "roman", label: "Roman" },
+                { slug: "developpement-personnel", label: "Développement personnel" },
+                { slug: "jeunesse", label: "Jeunesse" },
+                { slug: "bd-mangas", label: "BD & Mangas" },
+                { slug: "art", label: "Art" },
+                { slug: "fourniture", label: "Fourniture" },
+                { slug: "education", label: "Éducation" },
+                { slug: "autres", label: "Autres" },
+              ].map(({ slug, label }) => (
+                <li key={slug}>
+                  <Link
+                    href={slug ? `/livres?rayon=${slug}` : "/livres"}
+                    className={`block px-3 py-2 rounded-lg transition-colors ${
+                      (slug === "" && !rayon) || rayon === slug
+                        ? "font-bold text-white bg-[#1e3a5f]"
+                        : "text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -60,7 +86,9 @@ export default async function LivresPage({
       <main className="flex-1">
         <div className="mb-6">
           <h1 className="text-3xl font-extrabold text-[#1e3a5f] mb-1">
-            {rayon ? `Rayon : ${rayon.charAt(0).toUpperCase() + rayon.slice(1).replace('-', ' ')}` : "Tous les livres"}
+            {rayon
+              ? `Rayon : ${{ roman: "Roman", "developpement-personnel": "Développement personnel", jeunesse: "Jeunesse", "bd-mangas": "BD & Mangas", art: "Art", fourniture: "Fourniture", education: "Éducation", autres: "Autres" }[rayon] ?? rayon}`
+              : "Tous les livres"}
           </h1>
           <p className="text-slate-500 text-sm">
             {books.length} {books.length > 1 ? "résultats trouvés" : "résultat trouvé"}
