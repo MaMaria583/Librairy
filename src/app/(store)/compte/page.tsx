@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { User, Eye, EyeOff, ArrowLeft, CheckCircle } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { registerUser } from "./actions";
 
 type View = "home" | "login" | "register" | "success";
@@ -12,6 +13,24 @@ export default function ComptePage() {
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    startTransition(async () => {
+      const res = await signIn("credentials", {
+        email: formData.get("email"),
+        password: formData.get("password"),
+        redirect: false,
+      });
+      if (res?.error) {
+        setError("E-mail ou mot de passe incorrect.");
+      } else {
+        window.location.href = "/";
+      }
+    });
+  }
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -92,12 +111,19 @@ export default function ComptePage() {
             </button>
             <h2 className="text-xl font-extrabold text-[#1e3a5f] mb-1">Se connecter</h2>
             <p className="text-slate-500 text-sm mb-6">Bienvenue ! Entrez vos identifiants.</p>
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4">
+                {error}
+              </div>
+            )}
+            <form className="space-y-4" onSubmit={handleLogin}>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Adresse e-mail</label>
                 <input
+                  name="email"
                   type="email"
                   placeholder="exemple@email.com"
+                  required
                   className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30"
                 />
               </div>
@@ -105,18 +131,24 @@ export default function ComptePage() {
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Mot de passe</label>
                 <div className="relative">
                   <input
+                    name="password"
                     type={showPwd ? "text" : "password"}
                     placeholder="••••••••"
+                    required
                     className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30 pr-10"
                   />
                   <button type="button" onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                     {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-right mt-1"><button className="text-xs text-[#1e3a5f] hover:underline">Mot de passe oublié ?</button></p>
+                <p className="text-right mt-1"><button type="button" className="text-xs text-[#1e3a5f] hover:underline">Mot de passe oublié ?</button></p>
               </div>
-              <button type="submit" className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors mt-2">
-                Se connecter
+              <button
+                type="submit"
+                disabled={isPending}
+                className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors mt-2"
+              >
+                {isPending ? "Connexion..." : "Se connecter"}
               </button>
             </form>
             <p className="text-center text-sm text-slate-500 mt-5">
