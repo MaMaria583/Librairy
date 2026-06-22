@@ -5,10 +5,22 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const SLIDES = [
-  { src: "/images/hero/hero-1.jpg", alt: "Enfants lisant ensemble" },
-  { src: "/images/hero/hero-2.jpg", alt: "Homme lisant près d'une fenêtre" },
-  { src: "/images/hero/hero-3.jpg", alt: "Bibliothèque classique" },
-  { src: "/images/hero/hero-4.jpg", alt: "Femme parcourant des livres d'art" },
+  {
+    src: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&h=800&fit=crop&q=80",
+    alt: "Enfants lisant ensemble",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1600&h=800&fit=crop&q=80",
+    alt: "Homme lisant près d'une fenêtre",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600&h=800&fit=crop&q=80",
+    alt: "Bibliothèque classique",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1600&h=800&fit=crop&q=80",
+    alt: "Femme parcourant des livres d'art",
+  },
 ];
 
 export function HeroSlider() {
