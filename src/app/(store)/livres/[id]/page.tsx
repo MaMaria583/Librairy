@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, ArrowLeft, Star, ShoppingCart, Package } from "lucide-react";
+import { BookOpen, ArrowLeft, Star, Package } from "lucide-react";
+import { AddToCartButton } from "@/components/storefront/AddToCartButton";
 
 export default async function LivreDetailPage({
   params,
@@ -89,10 +90,13 @@ export default async function LivreDetailPage({
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <button className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 px-6 rounded-xl transition-colors">
-              <ShoppingCart size={18} />
-              Ajouter au panier
-            </button>
+            <AddToCartButton
+              id={book.id}
+              title={book.name}
+              author={book.author || ""}
+              price={book.sellPrice}
+              imageUrl={book.imageUrl}
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600 bg-pink-50/60 rounded-xl p-5 border border-pink-100">
