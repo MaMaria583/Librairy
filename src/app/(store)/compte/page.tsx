@@ -1,14 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { User, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useState, useTransition } from "react";
+import { User, Eye, EyeOff, ArrowLeft, CheckCircle } from "lucide-react";
+import { registerUser } from "./actions";
 
-type View = "home" | "login" | "register";
+type View = "home" | "login" | "register" | "success";
 
 export default function ComptePage() {
   const [view, setView] = useState<View>("home");
   const [showPwd, setShowPwd] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    startTransition(async () => {
+      const result = await registerUser(formData);
+      if (result.success) {
+        setView("success");
+      } else {
+        setError(result.error);
+      }
+    });
+  }
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center bg-slate-50 py-16 px-4">
@@ -43,6 +60,27 @@ export default function ComptePage() {
             <Link href="/" className="inline-block mt-6 text-sm text-slate-400 hover:text-[#1e3a5f]">
               ← Retour à l&apos;accueil
             </Link>
+          </div>
+        )}
+
+        {/* ── Succès inscription ── */}
+        {view === "success" && (
+          <div className="text-center">
+            <div className="flex justify-center mb-5">
+              <div className="bg-emerald-50 rounded-full p-4">
+                <CheckCircle className="w-10 h-10 text-emerald-500" />
+              </div>
+            </div>
+            <h2 className="text-xl font-extrabold text-[#1e3a5f] mb-2">Compte créé !</h2>
+            <p className="text-slate-500 text-sm mb-6">
+              Votre compte a bien été créé. Vous pouvez maintenant vous connecter.
+            </p>
+            <button
+              onClick={() => { setView("login"); setError(null); }}
+              className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors"
+            >
+              Se connecter
+            </button>
           </div>
         )}
 
@@ -97,21 +135,28 @@ export default function ComptePage() {
             <h2 className="text-xl font-extrabold text-[#1e3a5f] mb-1">Créer un compte</h2>
             <p className="text-slate-500 text-sm mb-6">Rejoignez DAR ELHIKMA en quelques secondes.</p>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4">
+                {error}
+              </div>
+            )}
+            <form className="space-y-4" onSubmit={handleRegister}>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Nom complet</label>
-                <input type="text" placeholder="Prénom Nom" className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30" />
+                <input name="name" type="text" placeholder="Prénom Nom" required className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Adresse e-mail</label>
-                <input type="email" placeholder="exemple@email.com" className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30" />
+                <input name="email" type="email" placeholder="exemple@email.com" required className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wide">Mot de passe</label>
                 <div className="relative">
                   <input
+                    name="password"
                     type={showPwd ? "text" : "password"}
                     placeholder="Minimum 8 caractères"
+                    required
                     className="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/30 pr-10"
                   />
                   <button type="button" onClick={() => setShowPwd(!showPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -119,8 +164,12 @@ export default function ComptePage() {
                   </button>
                 </div>
               </div>
-              <button type="submit" className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors mt-2">
-                Créer mon compte
+              <button
+                type="submit"
+                disabled={isPending}
+                className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors mt-2"
+              >
+                {isPending ? "Création en cours..." : "Créer mon compte"}
               </button>
             </form>
             <p className="text-center text-sm text-slate-500 mt-5">
