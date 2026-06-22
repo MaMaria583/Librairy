@@ -4,7 +4,7 @@ import { X, MessageCircle, Smartphone, CheckCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 
-const WHATSAPP_NUMBER = "221XXXXXXXXX"; // ← remplace par le vrai numéro WhatsApp du vendeur
+const WHATSAPP_NUMBER = "22394664694";
 
 const MOBILE_MONEY = [
   {
