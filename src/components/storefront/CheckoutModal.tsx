@@ -3,6 +3,7 @@
 import { X, MessageCircle, Smartphone, CheckCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
+import Image from "next/image";
 
 const WHATSAPP_NUMBER = "22394664694";
 
@@ -10,38 +11,34 @@ const MOBILE_MONEY = [
   {
     name: "Orange Money",
     number: "94 66 46 94",
-    color: "bg-orange-500",
     textColor: "text-orange-600",
     bg: "bg-orange-50",
     border: "border-orange-200",
-    logo: "🟠",
+    logo: "/images/Moyen de paiement/Orange Money.png",
   },
   {
     name: "Wave",
     number: "94 66 46 94",
-    color: "bg-blue-500",
     textColor: "text-blue-600",
     bg: "bg-blue-50",
     border: "border-blue-200",
-    logo: "🌊",
+    logo: "/images/Moyen de paiement/wave money.jpg",
   },
   {
     name: "Sama Money",
     number: "94 66 46 94",
-    color: "bg-purple-500",
     textColor: "text-purple-600",
     bg: "bg-purple-50",
     border: "border-purple-200",
-    logo: "💜",
+    logo: "/images/Moyen de paiement/sama money.jpg",
   },
   {
     name: "Moov Money",
     number: "94 66 46 94",
-    color: "bg-green-600",
     textColor: "text-green-700",
     bg: "bg-green-50",
     border: "border-green-200",
-    logo: "🟢",
+    logo: "/images/Moyen de paiement/moov money.png",
   },
 ];
 
@@ -123,7 +120,9 @@ export function CheckoutModal({ onClose }: Props) {
                   {selected === m.name && (
                     <CheckCircle className={`absolute top-2 right-2 w-4 h-4 ${m.textColor}`} />
                   )}
-                  <span className="text-2xl mb-1 block">{m.logo}</span>
+                  <div className="w-12 h-12 relative mb-2 rounded-lg overflow-hidden bg-white border border-slate-100">
+                    <Image src={m.logo} alt={m.name} fill className="object-contain p-1" sizes="48px" />
+                  </div>
                   <span className={`block font-bold text-sm ${selected === m.name ? m.textColor : "text-slate-800"}`}>
                     {m.name}
                   </span>
