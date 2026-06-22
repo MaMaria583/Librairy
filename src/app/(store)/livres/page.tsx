@@ -25,6 +25,8 @@ export default async function LivresPage({
     fourniture: "fourniture",
     autres: "autres",
     education: "éducation",
+    "livres-islamiques": "islamique",
+    "jeux-enfants": "jeux",
   };
 
   if (rayon && RAYONS[rayon]) {
@@ -48,14 +50,16 @@ export default async function LivresPage({
             <ul className="space-y-1.5 text-sm">
               {[
                 { slug: "", label: "Tous les livres" },
-                { slug: "roman", label: "Roman" },
-                { slug: "developpement-personnel", label: "Développement personnel" },
-                { slug: "jeunesse", label: "Jeunesse" },
-                { slug: "bd-mangas", label: "BD & Mangas" },
-                { slug: "art", label: "Art" },
-                { slug: "fourniture", label: "Fourniture" },
-                { slug: "education", label: "Éducation" },
-                { slug: "autres", label: "Autres" },
+                { slug: "roman", label: "Livre Roman" },
+                { slug: "developpement-personnel", label: "Livre Développement personnel" },
+                { slug: "jeunesse", label: "Livre Jeunesse" },
+                { slug: "bd-mangas", label: "Livre BD & Mangas" },
+                { slug: "art", label: "Livre Art" },
+                { slug: "fourniture", label: "Livre Fourniture" },
+                { slug: "education", label: "Livre Éducation" },
+                { slug: "livres-islamiques", label: "Livres islamiques" },
+                { slug: "jeux-enfants", label: "Jeux pour enfants" },
+                { slug: "autres", label: "Livre Autres" },
               ].map(({ slug, label }) => (
                 <li key={slug}>
                   <Link
@@ -82,7 +86,7 @@ export default async function LivresPage({
             {q
               ? `Recherche : "${q}"`
               : rayon
-              ? `Rayon : ${{ roman: "Roman", "developpement-personnel": "Développement personnel", jeunesse: "Jeunesse", "bd-mangas": "BD & Mangas", art: "Art", fourniture: "Fourniture", education: "Éducation", autres: "Autres" }[rayon] ?? rayon}`
+              ? `Rayon : ${{ roman: "Livre Roman", "developpement-personnel": "Livre Développement personnel", jeunesse: "Livre Jeunesse", "bd-mangas": "Livre BD & Mangas", art: "Livre Art", fourniture: "Livre Fourniture", education: "Livre Éducation", "livres-islamiques": "Livres islamiques", "jeux-enfants": "Jeux pour enfants", autres: "Livre Autres" }[rayon] ?? rayon}`
               : "Tous les livres"}
           </h1>
         </div>
