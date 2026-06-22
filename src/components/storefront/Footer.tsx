@@ -11,7 +11,7 @@ export function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center">
               <Image
-                src="/images/books/logo.png"
+                src="/images/books/logo.jpg"
                 alt="DAR ELHIKMA"
                 width={160}
                 height={50}

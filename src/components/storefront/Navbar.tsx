@@ -17,7 +17,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <Image
-              src="/images/books/logo.png"
+              src="/images/books/logo.jpg"
               alt="DAR ELHIKMA - Librairie et Papeterie"
               width={180}
               height={72}
