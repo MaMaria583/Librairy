@@ -8,7 +8,7 @@ export default function StoreLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex flex-col min-h-screen text-slate-900" style={{ backgroundImage: "url('/images/books/bg-pattern.jpg')", backgroundSize: "cover", backgroundAttachment: "fixed", backgroundPosition: "center" }}>
+    <div className="flex flex-col min-h-screen bg-white text-slate-900">
       <Navbar />
       <main className="flex-1">
         {children}

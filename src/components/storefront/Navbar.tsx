@@ -3,67 +3,58 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import { Search, Menu, X, ChevronDown } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X } from "lucide-react";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-pink-100">
-      <div className="w-full pl-0 pr-6 lg:pr-10">
-        <div className="flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-[#1e3a5f] text-white shadow-md">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link href="/" className="shrink-0">
+          <Link href="/" className="shrink-0 flex items-center">
             <Image
               src="/images/books/logo.jpg"
-              alt="DAR ELHIKMA - Librairie et Papeterie"
-              width={180}
-              height={72}
+              alt="DAR ELHIKMA"
+              width={130}
+              height={52}
               className="object-contain"
-              style={{ mixBlendMode: "multiply" }}
+              style={{ mixBlendMode: "screen" }}
               priority
             />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-medium">
-            <Link href="/" className="text-green-500 font-semibold">Accueil</Link>
-            <Link href="/livres" className="text-slate-600 hover:text-slate-900 transition-colors">Nouveautés</Link>
-            <div className="relative group">
-              <button className="flex items-center gap-1 text-slate-600 hover:text-slate-900 transition-colors">
-                Collections <ChevronDown className="h-4 w-4" />
-              </button>
-            </div>
-            <Link href="/livres?rayon=jeunesse" className="text-slate-600 hover:text-slate-900 transition-colors flex items-center gap-1">
-              Rayons <ChevronDown className="h-4 w-4" />
-            </Link>
-            <Link href="/boutique" className="text-slate-600 hover:text-slate-900 transition-colors">Boutique</Link>
-            <Link href="/contact" className="text-slate-600 hover:text-slate-900 transition-colors">Contact</Link>
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+            <Link href="/" className="text-white font-semibold border-b-2 border-white pb-0.5">Accueil</Link>
+            <Link href="/livres" className="text-white/75 hover:text-white transition-colors">Nouveautés</Link>
+            <Link href="/livres?rayon=litterature" className="text-white/75 hover:text-white transition-colors">Collections</Link>
+            <Link href="/livres?rayon=jeunesse" className="text-white/75 hover:text-white transition-colors">Abonnements</Link>
           </nav>
 
-          {/* Right: Search + Mobile */}
-          <div className="flex items-center gap-3">
-            {searchOpen && (
-              <input
-                autoFocus
-                type="search"
-                placeholder="Rechercher..."
-                className="hidden md:block h-9 px-4 rounded-full border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 w-52"
-                onBlur={() => setSearchOpen(false)}
-              />
-            )}
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-slate-600 hover:text-slate-900 transition-colors"
-            >
-              <Search className="h-5 w-5" />
-            </button>
-            <button
-              className="lg:hidden p-2 text-slate-700"
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
+          {/* Search + Icons */}
+          <div className="hidden md:flex flex-1 max-w-xs items-center bg-white/10 border border-white/20 rounded-full px-4 h-9 gap-2">
+            <Search className="h-4 w-4 text-white/60 shrink-0" />
+            <input
+              type="search"
+              placeholder="Trouver un livre, auteur, ISBN..."
+              className="bg-transparent text-sm text-white placeholder:text-white/50 outline-none w-full"
+            />
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Link href="/compte" className="hidden lg:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
+              <User className="h-5 w-5" />
+              <span>Compte</span>
+            </Link>
+            <Link href="/panier" className="relative flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="hidden lg:inline">Panier</span>
+              <span className="absolute -top-1.5 -right-1.5 bg-[#c0392b] text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
+            </Link>
+            <button className="lg:hidden p-1.5" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
@@ -72,13 +63,12 @@ export function Navbar() {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-slate-100 bg-white">
-          <nav className="container mx-auto px-6 py-4 flex flex-col gap-3 text-sm font-medium text-slate-600">
-            <Link href="/" className="py-2 text-green-500 font-semibold" onClick={() => setMobileOpen(false)}>Accueil</Link>
-            <Link href="/livres" className="py-2 hover:text-slate-900" onClick={() => setMobileOpen(false)}>Nouveautés</Link>
-            <Link href="/livres?rayon=litterature" className="py-2 hover:text-slate-900" onClick={() => setMobileOpen(false)}>Collections</Link>
-            <Link href="/livres?rayon=jeunesse" className="py-2 hover:text-slate-900" onClick={() => setMobileOpen(false)}>Rayons</Link>
-            <Link href="/contact" className="py-2 hover:text-slate-900" onClick={() => setMobileOpen(false)}>Contact</Link>
+        <div className="lg:hidden border-t border-white/10 bg-[#1e3a5f]">
+          <nav className="container mx-auto px-4 py-4 flex flex-col gap-2 text-sm font-medium">
+            <Link href="/" className="py-2 text-white" onClick={() => setMobileOpen(false)}>Accueil</Link>
+            <Link href="/livres" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Nouveautés</Link>
+            <Link href="/livres?rayon=litterature" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Collections</Link>
+            <Link href="/livres?rayon=jeunesse" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Abonnements</Link>
           </nav>
         </div>
       )}
