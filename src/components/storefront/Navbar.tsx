@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
-import { Search, User, ShoppingCart, Menu, X } from "lucide-react";
+import { Search, User, ShoppingCart, Menu, X, LogOut, ChevronDown } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#1e3a5f] text-white shadow-md">
@@ -45,10 +48,36 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <Link href="/compte" className="hidden lg:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
-              <User className="h-5 w-5" />
-              <span>Compte</span>
-            </Link>
+            {session?.user ? (
+              <div className="hidden lg:block relative">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-1.5 text-white/90 hover:text-white transition-colors text-sm"
+                >
+                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold uppercase">
+                    {session.user.name?.charAt(0) ?? "U"}
+                  </div>
+                  <span className="max-w-[120px] truncate">{session.user.name}</span>
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
+                    <p className="px-4 py-2 text-xs text-slate-400 border-b border-slate-100 truncate">{session.user.email}</p>
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" /> Se déconnecter
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link href="/compte" className="hidden lg:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
+                <User className="h-5 w-5" />
+                <span>Compte</span>
+              </Link>
+            )}
             <Link href="/panier" className="relative flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
               <ShoppingCart className="h-5 w-5" />
               <span className="hidden lg:inline">Panier</span>
