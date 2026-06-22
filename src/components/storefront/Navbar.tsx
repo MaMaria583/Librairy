@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, LogOut, ChevronDown } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
@@ -12,6 +13,13 @@ export function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { data: session } = useSession();
   const { totalItems } = useCart();
+  const router = useRouter();
+
+  function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = (e.currentTarget.elements.namedItem("q") as HTMLInputElement)?.value.trim();
+    if (q) router.push(`/livres?q=${encodeURIComponent(q)}`);
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#1e3a5f] text-white shadow-md">
@@ -40,14 +48,15 @@ export function Navbar() {
           </nav>
 
           {/* Search + Icons */}
-          <div className="hidden md:flex flex-1 max-w-xs items-center bg-white/10 border border-white/20 rounded-full px-4 h-9 gap-2">
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xs items-center bg-white/10 border border-white/20 rounded-full px-4 h-9 gap-2">
             <Search className="h-4 w-4 text-white/60 shrink-0" />
             <input
+              name="q"
               type="search"
               placeholder="Trouver un livre, auteur, ISBN..."
               className="bg-transparent text-sm text-white placeholder:text-white/50 outline-none w-full"
             />
-          </div>
+          </form>
 
           <div className="flex items-center gap-3 shrink-0">
             {session?.user ? (
