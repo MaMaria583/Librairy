@@ -10,7 +10,7 @@ export interface BookProps {
   genre?: string | null;
 }
 
-export function BookCard({ book }: { book: BookProps }) {
+export function BookCard({ book, badge }: { book: BookProps; badge?: string }) {
   const imageSrc = book.imageUrl || `https://covers.openlibrary.org/b/isbn/${book.title}-L.jpg`;
 
   return (
@@ -32,6 +32,9 @@ export function BookCard({ book }: { book: BookProps }) {
           <div className="flex items-center justify-center h-full text-slate-400 text-xs font-medium text-center p-4">
             Couverture non disponible
           </div>
+        )}
+        {badge && (
+          <span className="absolute top-2 left-2 bg-amber-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide shadow">{badge}</span>
         )}
         {/* Subtle overlay on hover */}
         <div className="absolute inset-0 bg-[#1e3a5f]/0 group-hover:bg-[#1e3a5f]/10 transition-colors duration-300" />

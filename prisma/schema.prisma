@@ -59,6 +59,8 @@ model Product {
   sku           String?
 
   imageUrl      String?
+  isNew         Boolean     @default(false)
+  isCollection  Boolean     @default(false)
 
   saleItems     SaleItem[]
   createdAt     DateTime    @default(now())
@@ -92,9 +94,20 @@ model SaleItem {
 }
 
 model User {
+  id            String            @id @default(cuid())
+  name          String
+  email         String            @unique
+  password      String
+  createdAt     DateTime          @default(now())
+  subscriptions UserSubscription[]
+}
+
+model UserSubscription {
   id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  genre     String
   createdAt DateTime @default(now())
+
+  @@unique([userId, genre])
 }

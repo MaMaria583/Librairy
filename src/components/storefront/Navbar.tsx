@@ -42,9 +42,10 @@ export function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             <Link href="/" className="text-white font-semibold border-b-2 border-white pb-0.5">Accueil</Link>
-            <Link href="/livres" className="text-white/75 hover:text-white transition-colors">Nouveautés</Link>
-            <Link href="/livres?rayon=litterature" className="text-white/75 hover:text-white transition-colors">Collections</Link>
-            <Link href="/livres?rayon=jeunesse" className="text-white/75 hover:text-white transition-colors">Abonnements</Link>
+            <Link href="/livres" className="text-white/75 hover:text-white transition-colors">Mes livres</Link>
+            <Link href="/nouveautes" className="text-white/75 hover:text-white transition-colors">Nouveautés</Link>
+            <Link href="/collections" className="text-white/75 hover:text-white transition-colors">Collections</Link>
+            <Link href="/abonnements" className="text-white/75 hover:text-white transition-colors">Abonnements</Link>
           </nav>
 
           {/* Search + Icons */}

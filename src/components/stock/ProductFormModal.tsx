@@ -29,12 +29,15 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
     isbn: product?.isbn ?? "",
     genre: product?.genre ?? "",
     location: product?.location ?? "",
+    isNew: product?.isNew ?? false,
+    isCollection: product?.isCollection ?? false,
     brand: product?.brand ?? "",
     category: product?.category ?? "",
     sku: product?.sku ?? "",
   });
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const toggle = (k: string) => setForm((f) => ({ ...f, [k]: !(f as Record<string, unknown>)[k] }));
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -54,6 +57,8 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
               isbn: form.isbn || undefined,
               genre: form.genre || undefined,
               location: form.location || undefined,
+              isNew: form.isNew,
+              isCollection: form.isCollection,
             }
           : {
               brand: form.brand || undefined,
@@ -121,6 +126,16 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
               <div><label className={labelCls}>ISBN</label><input className={inputCls} value={form.isbn} onChange={(e) => set("isbn", e.target.value)} /></div>
               <div><label className={labelCls}>Genre</label><input className={inputCls} value={form.genre} onChange={(e) => set("genre", e.target.value)} /></div>
               <div><label className={labelCls}>Emplacement</label><input className={inputCls} value={form.location} onChange={(e) => set("location", e.target.value)} /></div>
+              <div className="flex gap-6 pt-1">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={form.isNew} onChange={() => toggle("isNew")} className="w-4 h-4 accent-amber-500" />
+                  <span className="text-sm text-slate-700 font-medium">Marquer comme Nouveau</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={form.isCollection} onChange={() => toggle("isCollection")} className="w-4 h-4 accent-[#1e3a5f]" />
+                  <span className="text-sm text-slate-700 font-medium">Marquer comme Collection</span>
+                </label>
+              </div>
             </>
           ) : (
             <>
