@@ -15,14 +15,18 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="shrink-0">
+          <Link href="/" className="shrink-0 overflow-hidden block" style={{ width: 148, height: 56 }}>
             <Image
               src="/images/books/logo.png"
               alt="DAR ELHIKMA - Librairie et Papeterie"
-              width={160}
-              height={64}
-              className="object-contain"
-              style={{ mixBlendMode: "multiply" }}
+              width={148}
+              height={56}
+              className="object-cover"
+              style={{
+                objectPosition: "center 38%",
+                transform: "scale(1.38)",
+                transformOrigin: "center 38%",
+              }}
               priority
             />
           </Link>
