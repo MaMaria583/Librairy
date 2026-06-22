@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, ArrowRight, Trash2, Plus, Minus, BookOpen } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { CheckoutModal } from "@/components/storefront/CheckoutModal";
 
 export default function PanierPage() {
   const { items, removeItem, updateQty, totalItems, totalPrice } = useCart();
+  const [showCheckout, setShowCheckout] = useState(false);
 
   if (items.length === 0) {
     return (
@@ -28,6 +31,7 @@ export default function PanierPage() {
   }
 
   return (
+    <>
     <div className="bg-slate-50 min-h-screen py-10">
       <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
         <h1 className="text-2xl font-extrabold text-[#1e3a5f] mb-8">
@@ -99,7 +103,10 @@ export default function PanierPage() {
                   <span>{totalPrice.toFixed(2).replace(".", ",")} €</span>
                 </div>
               </div>
-              <button className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors">
+              <button
+                onClick={() => setShowCheckout(true)}
+                className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors"
+              >
                 Passer la commande
               </button>
               <Link href="/livres" className="block text-center text-sm text-slate-400 hover:text-slate-600 mt-3">
@@ -110,5 +117,8 @@ export default function PanierPage() {
         </div>
       </div>
     </div>
+
+    {showCheckout && <CheckoutModal onClose={() => setShowCheckout(false)} />}
+    </>
   );
 }
