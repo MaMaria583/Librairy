@@ -9,7 +9,7 @@ const WHATSAPP_NUMBER = "22394664694";
 const MOBILE_MONEY = [
   {
     name: "Orange Money",
-    number: "77 XXX XX XX",
+    number: "94 66 46 94",
     color: "bg-orange-500",
     textColor: "text-orange-600",
     bg: "bg-orange-50",
@@ -18,7 +18,7 @@ const MOBILE_MONEY = [
   },
   {
     name: "Wave",
-    number: "77 XXX XX XX",
+    number: "94 66 46 94",
     color: "bg-blue-500",
     textColor: "text-blue-600",
     bg: "bg-blue-50",
@@ -27,7 +27,7 @@ const MOBILE_MONEY = [
   },
   {
     name: "Sama Money",
-    number: "77 XXX XX XX",
+    number: "94 66 46 94",
     color: "bg-purple-500",
     textColor: "text-purple-600",
     bg: "bg-purple-50",
@@ -36,7 +36,7 @@ const MOBILE_MONEY = [
   },
   {
     name: "Moov Money",
-    number: "77 XXX XX XX",
+    number: "94 66 46 94",
     color: "bg-green-600",
     textColor: "text-green-700",
     bg: "bg-green-50",
