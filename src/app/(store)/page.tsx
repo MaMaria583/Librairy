@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { ArrowRight, Star, BookOpen } from "lucide-react";
+import { HeroSlider } from "@/components/storefront/HeroSlider";
 
 export const revalidate = 60;
 
@@ -22,43 +23,7 @@ export default async function StoreHomePage() {
   return (
     <div className="flex flex-col">
 
-      {/* ── Hero ── */}
-      <section className="relative w-full h-[420px] md:h-[500px] overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1600&h=800&fit=crop&q=80"
-          alt="Bibliothèque"
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/65" />
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-6 lg:px-10 text-white max-w-2xl">
-            <p className="text-xs md:text-sm tracking-[0.25em] uppercase text-white/70 mb-3 font-medium">
-              Des milliers d&apos;ouvrages sélectionnés avec soin
-            </p>
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-3 uppercase tracking-tight">
-              DÉCOUVREZ VOTRE PROCHAINE<br />AVENTURE LITTÉRAIRE
-            </h1>
-            <p className="text-sm md:text-base text-white/70 mb-7 max-w-lg">
-              Les meilleurs ouvrages sélectionnés avec passion.<br />Explorez et voyagez.
-            </p>
-            <Link
-              href="/livres"
-              className="inline-flex items-center gap-2 bg-white text-[#1e3a5f] font-bold px-7 py-3 rounded-md hover:bg-white/90 transition-colors text-sm uppercase tracking-wider"
-            >
-              Collections récentes
-            </Link>
-          </div>
-        </div>
-        {/* Slider dots */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2">
-          {[0,1,2].map(i => (
-            <span key={i} className={`rounded-full transition-all ${i === 0 ? "w-5 h-2 bg-white" : "w-2 h-2 bg-white/40"}`} />
-          ))}
-        </div>
-      </section>
+      <HeroSlider />
 
       {/* ── Nos Coups de Cœur ── */}
       <section className="bg-white py-14">
