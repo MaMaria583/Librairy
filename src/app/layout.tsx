@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "La Librairie",
-  description: "Librairie en ligne et application de gestion",
+  title: "DAR ELHIKMA - Librairie et Papeterie",
+  description: "Votre librairie et papeterie en ligne - DAR ELHIKMA",
+  icons: {
+    icon: "/images/books/logo.jpg",
+    apple: "/images/books/logo.jpg",
+  },
 };
 
 export default function RootLayout({
