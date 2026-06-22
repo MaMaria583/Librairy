@@ -39,18 +39,18 @@ export default async function LivresPage({
     <div className="container mx-auto px-4 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
       {/* Sidebar Filters */}
       <aside className="w-full md:w-64 shrink-0">
-        <div className="sticky top-24 space-y-8">
-          <div>
-            <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-slate-900 border-b pb-2">
-              <Filter className="h-5 w-5" /> Filtrer par rayon
+        <div className="sticky top-24">
+          <div className="bg-white/80 backdrop-blur-sm border border-pink-100 rounded-2xl p-5 shadow-sm">
+            <h3 className="font-bold text-base flex items-center gap-2 mb-4 text-[#1e3a5f] border-b border-pink-100 pb-3">
+              <Filter className="h-4 w-4" /> Filtrer par rayon
             </h3>
-            <ul className="space-y-3 text-sm text-slate-600">
-              <li><Link href="/livres" className={`hover:text-blue-600 ${!rayon ? 'font-bold text-blue-600' : ''}`}>Tous les livres</Link></li>
-              <li><Link href="/livres?rayon=litterature" className={`hover:text-blue-600 ${rayon === 'litterature' ? 'font-bold text-blue-600' : ''}`}>Littérature</Link></li>
-              <li><Link href="/livres?rayon=bd" className={`hover:text-blue-600 ${rayon === 'bd' ? 'font-bold text-blue-600' : ''}`}>BD & Mangas</Link></li>
-              <li><Link href="/livres?rayon=jeunesse" className={`hover:text-blue-600 ${rayon === 'jeunesse' ? 'font-bold text-blue-600' : ''}`}>Jeunesse</Link></li>
-              <li><Link href="/livres?rayon=vie-pratique" className={`hover:text-blue-600 ${rayon === 'vie-pratique' ? 'font-bold text-blue-600' : ''}`}>Vie pratique</Link></li>
-              <li><Link href="/livres?rayon=sciences-humaines" className={`hover:text-blue-600 ${rayon === 'sciences-humaines' ? 'font-bold text-blue-600' : ''}`}>Sciences humaines</Link></li>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/livres" className={`block px-3 py-2 rounded-lg transition-colors ${!rayon ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Tous les livres</Link></li>
+              <li><Link href="/livres?rayon=litterature" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'litterature' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Littérature</Link></li>
+              <li><Link href="/livres?rayon=bd" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'bd' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>BD &amp; Mangas</Link></li>
+              <li><Link href="/livres?rayon=jeunesse" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'jeunesse' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Jeunesse</Link></li>
+              <li><Link href="/livres?rayon=vie-pratique" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'vie-pratique' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Vie pratique</Link></li>
+              <li><Link href="/livres?rayon=sciences-humaines" className={`block px-3 py-2 rounded-lg transition-colors ${rayon === 'sciences-humaines' ? 'font-bold text-white bg-[#1e3a5f]' : 'text-slate-600 hover:bg-pink-50 hover:text-[#1e3a5f]'}`}>Sciences humaines</Link></li>
             </ul>
           </div>
         </div>
@@ -59,10 +59,10 @@ export default async function LivresPage({
       {/* Main Content */}
       <main className="flex-1">
         <div className="mb-6">
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">
+          <h1 className="text-3xl font-extrabold text-[#1e3a5f] mb-1">
             {rayon ? `Rayon : ${rayon.charAt(0).toUpperCase() + rayon.slice(1).replace('-', ' ')}` : "Tous les livres"}
           </h1>
-          <p className="text-slate-500">
+          <p className="text-slate-500 text-sm">
             {books.length} {books.length > 1 ? "résultats trouvés" : "résultat trouvé"}
           </p>
         </div>
@@ -77,13 +77,14 @@ export default async function LivresPage({
                   title: book.name,
                   author: book.author || "",
                   price: book.sellPrice,
+                  imageUrl: book.imageUrl,
                   genre: book.genre,
                 }} 
               />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+          <div className="text-center py-20 bg-white/70 backdrop-blur-sm rounded-2xl border border-dashed border-pink-200">
             <p className="text-lg text-slate-500 font-medium">Aucun livre ne correspond à votre recherche.</p>
             <Link href="/livres" className="mt-4 inline-block text-blue-600 hover:underline">Voir tous les livres</Link>
           </div>

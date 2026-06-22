@@ -24,15 +24,16 @@ export default async function LivreDetailPage({
     book.imageUrl || `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-8">
+    <div className="container mx-auto px-4 lg:px-8 py-8 max-w-5xl">
       <Link
         href="/livres"
-        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#1e3a5f] mb-8 transition-colors"
       >
         <ArrowLeft size={16} />
         Retour aux livres
       </Link>
 
+      <div className="bg-white/80 backdrop-blur-sm border border-pink-100 rounded-3xl p-6 lg:p-10 shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
         {/* Cover */}
         <div className="relative aspect-[2/3] w-full max-w-sm mx-auto md:mx-0 rounded-xl overflow-hidden bg-slate-100 shadow-lg">
@@ -55,7 +56,7 @@ export default async function LivreDetailPage({
         {/* Details */}
         <div className="md:col-span-2 flex flex-col gap-6">
           <div>
-            <span className="inline-block text-xs font-semibold tracking-wider uppercase text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3">
+            <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#b8960c] bg-amber-50 px-3 py-1 rounded-full mb-3 border border-amber-100">
               {book.genre || "Livre"}
             </span>
             <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2">
@@ -88,13 +89,13 @@ export default async function LivreDetailPage({
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <button className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+            <button className="flex-1 min-w-[200px] inline-flex items-center justify-center gap-2 bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 px-6 rounded-xl transition-colors">
               <ShoppingCart size={18} />
               Ajouter au panier
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600 bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600 bg-pink-50/60 rounded-xl p-5 border border-pink-100">
             <div>
               <span className="block text-xs text-slate-400 uppercase tracking-wider">Éditeur</span>
               <span className="font-medium text-slate-800">{book.publisher || "—"}</span>
@@ -120,6 +121,7 @@ export default async function LivreDetailPage({
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

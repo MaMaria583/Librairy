@@ -15,19 +15,15 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <Link href="/" className="flex items-center shrink-0">
             <Image
               src="/images/books/logo.png"
               alt="DAR ELHIKMA - Librairie et Papeterie"
-              width={48}
-              height={48}
+              width={180}
+              height={56}
               className="object-contain"
               priority
             />
-            <div className="hidden sm:flex flex-col leading-none">
-              <span className="text-lg font-black text-[#1e3a5f] tracking-widest uppercase">DAR ELHIKMA</span>
-              <span className="text-[9px] tracking-[0.18em] text-[#b8960c] font-semibold uppercase">Librairie &amp; Papeterie</span>
-            </div>
           </Link>
 
           {/* Desktop Nav */}

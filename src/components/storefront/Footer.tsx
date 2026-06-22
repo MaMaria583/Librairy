@@ -9,18 +9,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-slate-800 pb-8">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/" className="flex items-center">
               <Image
                 src="/images/books/logo.png"
                 alt="DAR ELHIKMA"
-                width={44}
-                height={44}
+                width={160}
+                height={50}
                 className="object-contain brightness-0 invert"
               />
-              <div className="flex flex-col leading-none">
-                <span className="text-lg font-black text-white tracking-widest uppercase">DAR ELHIKMA</span>
-                <span className="text-[9px] tracking-[0.15em] text-[#d4a84b] font-semibold uppercase">Librairie &amp; Papeterie</span>
-              </div>
             </Link>
             <p className="text-sm text-slate-400">
               Votre librairie en ligne de confiance. Découvrez des milliers de références de livres, BD, mangas, et plus encore.
