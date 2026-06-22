@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookCard } from "@/components/storefront/BookCard";
+import { FuzzyBookSearch } from "@/components/storefront/FuzzyBookSearch";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { Filter } from "lucide-react";
@@ -28,14 +29,6 @@ export default async function LivresPage({
 
   if (rayon && RAYONS[rayon]) {
     whereClause.genre = { contains: RAYONS[rayon], mode: "insensitive" };
-  }
-
-  if (q) {
-    whereClause.OR = [
-      { name: { contains: q, mode: "insensitive" } },
-      { author: { contains: q, mode: "insensitive" } },
-      { isbn: { contains: q, mode: "insensitive" } },
-    ];
   }
 
   const books = await prisma.product.findMany({
@@ -86,35 +79,51 @@ export default async function LivresPage({
       <main className="flex-1">
         <div className="mb-6">
           <h1 className="text-3xl font-extrabold text-[#1e3a5f] mb-1">
-            {rayon
+            {q
+              ? `Recherche : "${q}"`
+              : rayon
               ? `Rayon : ${{ roman: "Roman", "developpement-personnel": "Développement personnel", jeunesse: "Jeunesse", "bd-mangas": "BD & Mangas", art: "Art", fourniture: "Fourniture", education: "Éducation", autres: "Autres" }[rayon] ?? rayon}`
               : "Tous les livres"}
           </h1>
-          <p className="text-slate-500 text-sm">
-            {books.length} {books.length > 1 ? "résultats trouvés" : "résultat trouvé"}
-          </p>
         </div>
 
-        {books.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {books.map((book) => (
-              <BookCard 
-                key={book.id} 
-                book={{
-                  id: book.id,
-                  title: book.name,
-                  author: book.author || "",
-                  price: book.sellPrice,
-                  imageUrl: book.imageUrl,
-                  genre: book.genre,
-                }} 
-              />
-            ))}
-          </div>
+        {q ? (
+          <FuzzyBookSearch
+            query={q}
+            books={books.map((book) => ({
+              id: book.id,
+              title: book.name,
+              author: book.author || "",
+              price: book.sellPrice,
+              imageUrl: book.imageUrl,
+              genre: book.genre,
+            }))}
+          />
+        ) : books.length > 0 ? (
+          <>
+            <p className="text-slate-500 text-sm mb-6">
+              {books.length} résultat{books.length > 1 ? "s" : ""}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {books.map((book) => (
+                <BookCard
+                  key={book.id}
+                  book={{
+                    id: book.id,
+                    title: book.name,
+                    author: book.author || "",
+                    price: book.sellPrice,
+                    imageUrl: book.imageUrl,
+                    genre: book.genre,
+                  }}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <div className="text-center py-20 bg-white/70 backdrop-blur-sm rounded-2xl border border-dashed border-pink-200">
-            <p className="text-lg text-slate-500 font-medium">Aucun livre ne correspond à votre recherche.</p>
-            <Link href="/livres" className="mt-4 inline-block text-blue-600 hover:underline">Voir tous les livres</Link>
+            <p className="text-lg text-slate-500 font-medium">Aucun livre dans ce rayon pour l&apos;instant.</p>
+            <Link href="/livres" className="mt-4 inline-block text-[#1e3a5f] hover:underline">Voir tous les livres</Link>
           </div>
         )}
       </main>
