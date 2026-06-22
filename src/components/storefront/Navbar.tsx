@@ -11,17 +11,18 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm border-b border-pink-100">
-      <div className="container mx-auto px-6 lg:px-10">
+      <div className="w-full pl-0 pr-6 lg:pr-10">
         <div className="flex h-16 items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href="/" className="shrink-0">
             <Image
               src="/images/books/logo.png"
               alt="DAR ELHIKMA - Librairie et Papeterie"
-              width={180}
-              height={56}
+              width={160}
+              height={64}
               className="object-contain"
+              style={{ mixBlendMode: "multiply" }}
               priority
             />
           </Link>
