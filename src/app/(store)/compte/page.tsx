@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { User, Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 type View = "home" | "login" | "register";
@@ -100,6 +101,7 @@ export default function ComptePage() {
             {/* Google */}
             <button
               type="button"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
               className="w-full flex items-center justify-center gap-3 border border-slate-200 rounded-xl py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors mb-4"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
