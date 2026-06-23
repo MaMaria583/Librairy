@@ -3,6 +3,7 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { ArrowRight, Star, BookOpen } from "lucide-react";
 import { HeroSlider } from "@/components/storefront/HeroSlider";
+import { formatPrice } from "@/lib/formatPrice";
 
 export const revalidate = 60;
 
@@ -14,9 +15,8 @@ export default async function StoreHomePage() {
   });
 
   const nouveautes = await prisma.product.findMany({
-    where: { type: "LIVRE", stock: { gt: 0 } },
+    where: { type: "LIVRE", stock: { gt: 0 }, isNew: true },
     orderBy: { createdAt: "desc" },
-    skip: 6,
     take: 6,
   });
 
@@ -63,7 +63,7 @@ export default async function StoreHomePage() {
                       ))}
                     </div>
                     <p className="text-sm font-bold text-[#1e3a5f] mt-auto">
-                      {book.sellPrice.toFixed(2).replace(".", ",")} €
+                      {formatPrice(book.sellPrice)}
                     </p>
                   </div>
                 </Link>
@@ -114,7 +114,7 @@ export default async function StoreHomePage() {
                       ))}
                     </div>
                     <p className="text-sm font-bold text-[#1e3a5f] mt-auto">
-                      {book.sellPrice.toFixed(2).replace(".", ",")} €
+                      {formatPrice(book.sellPrice)}
                     </p>
                   </div>
                 </Link>
