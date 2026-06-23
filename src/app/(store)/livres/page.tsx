@@ -59,7 +59,7 @@ export default async function LivresPage({
                 { slug: "education", label: "Livre Éducation" },
                 { slug: "livres-islamiques", label: "Livres islamiques" },
                 { slug: "jeux-enfants", label: "Jeux pour enfants" },
-                { slug: "autres", label: "Livre Autres" },
+                { slug: "autres", label: "Autres Livres" },
               ].map(({ slug, label }) => (
                 <li key={slug}>
                   <Link
@@ -86,7 +86,7 @@ export default async function LivresPage({
             {q
               ? `Recherche : "${q}"`
               : rayon
-              ? `Rayon : ${{ roman: "Livre Roman", "developpement-personnel": "Livre Développement personnel", jeunesse: "Livre Jeunesse", "bd-mangas": "Livre BD & Mangas", art: "Livre Art", fourniture: "Livre Fourniture", education: "Livre Éducation", "livres-islamiques": "Livres islamiques", "jeux-enfants": "Jeux pour enfants", autres: "Livre Autres" }[rayon] ?? rayon}`
+              ? `Rayon : ${{ roman: "Livre Roman", "developpement-personnel": "Livre Développement personnel", jeunesse: "Livre Jeunesse", "bd-mangas": "Livre BD & Mangas", art: "Livre Art", fourniture: "Livre Fourniture", education: "Livre Éducation", "livres-islamiques": "Livres islamiques", "jeux-enfants": "Jeux pour enfants", autres: "Autres Livres" }[rayon] ?? rayon}`
               : "Tous les livres"}
           </h1>
         </div>
