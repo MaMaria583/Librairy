@@ -6,10 +6,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-  }).format(amount);
+  return (
+    new Intl.NumberFormat("fr-ML", {
+      maximumFractionDigits: 0,
+    }).format(Math.round(amount)) + " FCFA"
+  );
 }
 
 export function formatDate(date: Date | string): string {

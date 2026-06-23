@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, ArrowLeft, Star, Package } from "lucide-react";
 import { AddToCartButton } from "@/components/storefront/AddToCartButton";
+import { formatPrice } from "@/lib/formatPrice";
 
 export default async function LivreDetailPage({
   params,
@@ -80,11 +81,11 @@ export default async function LivreDetailPage({
 
           <div className="flex items-baseline gap-3">
             <span className="text-4xl font-extrabold text-slate-900">
-              {book.sellPrice.toFixed(2).replace(".", ",")} €
+              {formatPrice(book.sellPrice)}
             </span>
             {book.buyPrice > 0 && (
               <span className="text-sm text-slate-400 line-through">
-                {(book.sellPrice * 1.2).toFixed(2).replace(".", ",")} €
+                {formatPrice(book.sellPrice * 1.2)}
               </span>
             )}
           </div>

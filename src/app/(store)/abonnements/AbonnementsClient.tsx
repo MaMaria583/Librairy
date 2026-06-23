@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Bell, BellOff, CheckCircle, Sparkles, BookOpen } from "lucide-react";
+import { formatPrice } from "@/lib/formatPrice";
 import { toggleSubscription } from "./actions";
 import { BookCard } from "@/components/storefront/BookCard";
 import type { BookProps } from "@/components/storefront/BookCard";

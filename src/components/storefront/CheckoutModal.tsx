@@ -4,6 +4,7 @@ import { X, MessageCircle, Smartphone, CheckCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Image from "next/image";
+import { formatPrice } from "@/lib/formatPrice";
 
 const WHATSAPP_NUMBER = "22394664694";
 
@@ -51,11 +52,11 @@ export function CheckoutModal({ onClose }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
 
   const cartSummary = items
-    .map((i) => `• ${i.title} x${i.quantity} — ${(i.price * i.quantity).toFixed(2)} €`)
+    .map((i) => `• ${i.title} x${i.quantity} — ${formatPrice(i.price * i.quantity)}`)
     .join("\n");
 
   const whatsappMessage = encodeURIComponent(
-    `Bonjour, je souhaite passer commande :\n\n${cartSummary}\n\nTotal : ${totalPrice.toFixed(2)} €\n\nMerci !`
+    `Bonjour, je souhaite passer commande :\n\n${cartSummary}\n\nTotal : ${formatPrice(totalPrice)}\n\nMerci !`
   );
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
@@ -70,7 +71,7 @@ export function CheckoutModal({ onClose }: Props) {
         <div className="flex items-center justify-between p-6 border-b border-slate-100">
           <div>
             <h2 className="text-xl font-extrabold text-[#1e3a5f]">Finaliser la commande</h2>
-            <p className="text-sm text-slate-400 mt-0.5">Total : <span className="font-semibold text-slate-700">{totalPrice.toFixed(2).replace(".", ",")} €</span></p>
+            <p className="text-sm text-slate-400 mt-0.5">Total : <span className="font-semibold text-slate-700">{formatPrice(totalPrice)}</span></p>
           </div>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-100 transition-colors">
             <X className="w-5 h-5 text-slate-400" />
@@ -139,7 +140,7 @@ export function CheckoutModal({ onClose }: Props) {
                   <div className="flex items-start gap-3">
                     <Smartphone className={`w-5 h-5 mt-0.5 ${m.textColor} shrink-0`} />
                     <div>
-                      <p className={`font-bold text-sm ${m.textColor}`}>Envoyez {totalPrice.toFixed(2).replace(".", ",")} € via {m.name}</p>
+                      <p className={`font-bold text-sm ${m.textColor}`}>Envoyez {formatPrice(totalPrice)} via {m.name}</p>
                       <p className="text-sm text-slate-600 mt-1">
                         Numéro : <span className="font-mono font-bold text-slate-900">{m.number}</span>
                       </p>

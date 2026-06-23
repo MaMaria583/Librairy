@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { formatPrice } from "@/lib/formatPrice";
 
 export interface BookProps {
   id: string;
@@ -49,7 +50,7 @@ export function BookCard({ book, badge }: { book: BookProps; badge?: string }) {
 
         <div className="mt-auto flex items-center justify-between pt-2 border-t border-slate-50">
           <span className="text-base font-bold text-[#c0392b]">
-            {book.price.toFixed(2).replace('.', ',')} €
+            {formatPrice(book.price)}
           </span>
           <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
             {book.genre || "Livre"}

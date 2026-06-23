@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, ArrowRight, Trash2, Plus, Minus, BookOpen } from "lucide-react";
+import { formatPrice } from "@/lib/formatPrice";
 import { useCart } from "@/contexts/CartContext";
 import { CheckoutModal } from "@/components/storefront/CheckoutModal";
 
@@ -60,7 +61,7 @@ export default function PanierPage() {
                     {item.title}
                   </Link>
                   <p className="text-xs text-slate-400 mt-0.5">{item.author || "Auteur inconnu"}</p>
-                  <p className="text-base font-bold text-[#1e3a5f] mt-1">{item.price.toFixed(2).replace(".", ",")} €</p>
+                  <p className="text-base font-bold text-[#1e3a5f] mt-1">{formatPrice(item.price)}</p>
                 </div>
 
                 {/* Qty controls */}
@@ -76,7 +77,7 @@ export default function PanierPage() {
 
                 {/* Subtotal + delete */}
                 <div className="text-right shrink-0 ml-2">
-                  <p className="text-sm font-bold text-slate-800">{(item.price * item.quantity).toFixed(2).replace(".", ",")} €</p>
+                  <p className="text-sm font-bold text-slate-800">{formatPrice(item.price * item.quantity)}</p>
                   <button onClick={() => removeItem(item.id)} className="mt-1 text-red-400 hover:text-red-600 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -92,7 +93,7 @@ export default function PanierPage() {
               <div className="space-y-2 text-sm text-slate-600 mb-4">
                 <div className="flex justify-between">
                   <span>Sous-total ({totalItems} art.)</span>
-                  <span>{totalPrice.toFixed(2).replace(".", ",")} €</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Livraison</span>
@@ -100,7 +101,7 @@ export default function PanierPage() {
                 </div>
                 <div className="flex justify-between font-bold text-base text-slate-900 border-t border-slate-100 pt-3 mt-3">
                   <span>Total</span>
-                  <span>{totalPrice.toFixed(2).replace(".", ",")} €</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
               </div>
               <button
