@@ -18,115 +18,139 @@ export default async function LivreDetailPage({
     include: { supplier: true },
   });
 
-  if (!book) {
-    notFound();
-  }
+  if (!book) notFound();
 
-  const imageSrc =
-    book.imageUrl || `https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`;
+  const imageSrc = book.imageUrl || null;
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-8 max-w-5xl">
-      <Link
-        href="/livres"
-        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-[#1e3a5f] mb-8 transition-colors"
-      >
-        <ArrowLeft size={16} />
-        Retour aux livres
-      </Link>
+    <div className="min-h-screen">
+      {/* ── Hero dark section ─────────────────────────────────── */}
+      <div className="bg-[#1a2a3a] text-white">
+        <div className="container mx-auto px-4 lg:px-8 py-6">
+          <Link
+            href="/livres"
+            className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors mb-6"
+          >
+            <ArrowLeft size={15} />
+            Retour aux livres
+          </Link>
 
-      <div className="bg-white/80 backdrop-blur-sm border border-pink-100 rounded-3xl p-6 lg:p-10 shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-        {/* Cover */}
-        <div className="relative aspect-[2/3] w-full max-w-sm mx-auto md:mx-0 rounded-xl overflow-hidden bg-slate-100 shadow-lg">
-          {book.imageUrl ? (
-            <Image
-              src={imageSrc}
-              alt={book.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 400px"
-              priority
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-slate-400">
-              <BookOpen size={48} />
+          <div className="flex flex-col md:flex-row gap-8 lg:gap-12 pb-10">
+            {/* Cover */}
+            <div className="shrink-0 w-40 md:w-52 lg:w-60 mx-auto md:mx-0">
+              <div className="relative aspect-[2/3] w-full rounded-xl overflow-hidden shadow-2xl bg-slate-800">
+                {imageSrc ? (
+                  <Image
+                    src={imageSrc}
+                    alt={book.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 160px, 240px"
+                    priority
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-slate-600">
+                    <BookOpen size={48} />
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Details */}
-        <div className="md:col-span-2 flex flex-col gap-6">
-          <div>
-            <span className="inline-block text-xs font-semibold tracking-wider uppercase text-[#b8960c] bg-amber-50 px-3 py-1 rounded-full mb-3 border border-amber-100">
-              {book.genre || "Livre"}
-            </span>
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2">
-              {book.name}
-            </h1>
-            <p className="text-lg text-slate-500">
-              par <span className="font-medium text-slate-700">{book.author || "Auteur inconnu"}</span>
-            </p>
-          </div>
+            {/* Info */}
+            <div className="flex flex-col gap-4 flex-1">
+              {book.genre && (
+                <span className="inline-block self-start text-xs font-semibold tracking-widest uppercase text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
+                  {book.genre}
+                </span>
+              )}
 
-          <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                className={`w-5 h-5 ${star <= 4 ? "fill-yellow-400 text-yellow-400" : "fill-slate-200 text-slate-200"}`}
-              />
-            ))}
-            <span className="text-sm text-slate-400 ml-2">(4.0)</span>
-          </div>
+              <h1 className="text-2xl lg:text-4xl font-extrabold leading-tight">
+                {book.name}
+              </h1>
 
-          <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-extrabold text-slate-900">
-              {formatPrice(book.sellPrice)}
-            </span>
-            {book.buyPrice > 0 && (
-              <span className="text-sm text-slate-400 line-through">
-                {formatPrice(book.sellPrice * 1.2)}
-              </span>
-            )}
-          </div>
+              {book.author && (
+                <p className="text-lg text-white/60">
+                  par <span className="text-white/90 font-medium">{book.author}</span>
+                </p>
+              )}
 
-          <div className="flex flex-wrap gap-4">
-            <AddToCartButton
-              id={book.id}
-              title={book.name}
-              author={book.author || ""}
-              price={book.sellPrice}
-              imageUrl={book.imageUrl}
-            />
-          </div>
+              {/* Rating */}
+              <div className="flex items-center gap-1.5">
+                {[1,2,3,4,5].map((s) => (
+                  <Star key={s} className={`w-5 h-5 ${s <= 4 ? "fill-yellow-400 text-yellow-400" : "fill-white/20 text-white/20"}`} />
+                ))}
+                <span className="text-sm text-white/40 ml-1">4.0 / 5.0</span>
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600 bg-pink-50/60 rounded-xl p-5 border border-pink-100">
-            <div>
-              <span className="block text-xs text-slate-400 uppercase tracking-wider">Éditeur</span>
-              <span className="font-medium text-slate-800">{book.publisher || "—"}</span>
-            </div>
-            <div>
-              <span className="block text-xs text-slate-400 uppercase tracking-wider">ISBN</span>
-              <span className="font-medium text-slate-800 font-mono">{book.isbn || "—"}</span>
-            </div>
-            <div>
-              <span className="block text-xs text-slate-400 uppercase tracking-wider">Emplacement</span>
-              <span className="font-medium text-slate-800">{book.location || "—"}</span>
-            </div>
-            <div>
-              <span className="block text-xs text-slate-400 uppercase tracking-wider">Fournisseur</span>
-              <span className="font-medium text-slate-800">{book.supplier?.name || "—"}</span>
-            </div>
-            <div>
-              <span className="block text-xs text-slate-400 uppercase tracking-wider">Stock</span>
-              <span className={`font-medium inline-flex items-center gap-1 ${book.stock === 0 ? "text-red-600" : book.stock <= book.alertThreshold ? "text-orange-500" : "text-emerald-600"}`}>
-                <Package size={14} />
-                {book.stock === 0 ? "Épuisé" : `${book.stock} en stock`}
-              </span>
+              {/* Price */}
+              <div className="flex items-baseline gap-3 mt-1">
+                <span className="text-3xl font-extrabold text-white">
+                  {formatPrice(book.sellPrice)}
+                </span>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${book.stock === 0 ? "bg-red-500/20 text-red-300" : "bg-emerald-500/20 text-emerald-300"}`}>
+                  {book.stock === 0 ? "Épuisé" : "En stock"}
+                </span>
+              </div>
+
+              {/* Action */}
+              <div className="mt-2">
+                <AddToCartButton
+                  id={book.id}
+                  title={book.name}
+                  author={book.author || ""}
+                  price={book.sellPrice}
+                  imageUrl={book.imageUrl}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* ── Content section ───────────────────────────────────── */}
+      <div className="container mx-auto px-4 lg:px-8 py-10 max-w-5xl">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+          {/* Description */}
+          <div className="lg:col-span-2">
+            <h2 className="text-lg font-bold text-[#1e3a5f] mb-4 pb-2 border-b border-slate-100">
+              À propos du livre
+            </h2>
+            {book.description ? (
+              <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                {book.description}
+              </p>
+            ) : (
+              <p className="text-slate-400 italic text-sm">
+                Aucune description disponible pour ce livre.
+              </p>
+            )}
+          </div>
+
+          {/* Metadata */}
+          <div>
+            <h2 className="text-lg font-bold text-[#1e3a5f] mb-4 pb-2 border-b border-slate-100">
+              Informations
+            </h2>
+            <dl className="space-y-4 text-sm">
+              {[
+                { label: "Éditeur", value: book.publisher },
+                { label: "ISBN", value: book.isbn, mono: true },
+                { label: "Genre", value: book.genre },
+                { label: "Emplacement", value: book.location },
+                { label: "Fournisseur", value: book.supplier?.name },
+                { label: "Stock", value: book.stock === 0 ? "Épuisé" : `${book.stock} exemplaire${book.stock > 1 ? "s" : ""}` },
+              ].map(({ label, value, mono }) =>
+                value ? (
+                  <div key={label} className="flex flex-col gap-0.5">
+                    <dt className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{label}</dt>
+                    <dd className={`font-medium text-slate-800 ${mono ? "font-mono" : ""}`}>{value}</dd>
+                  </div>
+                ) : null
+              )}
+            </dl>
+          </div>
+        </div>
       </div>
     </div>
   );

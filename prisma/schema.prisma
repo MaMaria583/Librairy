@@ -59,6 +59,7 @@ model Product {
   sku           String?
 
   imageUrl      String?
+  description   String?     @db.Text
   isNew         Boolean     @default(false)
   isCollection  Boolean     @default(false)
 

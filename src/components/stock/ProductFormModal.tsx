@@ -29,6 +29,7 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
     isbn: product?.isbn ?? "",
     genre: product?.genre ?? "",
     location: product?.location ?? "",
+    description: product?.description ?? "",
     isNew: product?.isNew ?? false,
     isCollection: product?.isCollection ?? false,
     brand: product?.brand ?? "",
@@ -57,6 +58,7 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
               isbn: form.isbn || undefined,
               genre: form.genre || undefined,
               location: form.location || undefined,
+              description: form.description || undefined,
               isNew: form.isNew,
               isCollection: form.isCollection,
             }
@@ -126,6 +128,10 @@ export function ProductFormModal({ product, suppliers, type, onClose }: Props) {
               <div><label className={labelCls}>ISBN</label><input className={inputCls} value={form.isbn} onChange={(e) => set("isbn", e.target.value)} /></div>
               <div><label className={labelCls}>Genre</label><input className={inputCls} value={form.genre} onChange={(e) => set("genre", e.target.value)} /></div>
               <div><label className={labelCls}>Emplacement</label><input className={inputCls} value={form.location} onChange={(e) => set("location", e.target.value)} /></div>
+              <div>
+                <label className={labelCls}>Description / Introduction</label>
+                <textarea rows={4} className={inputCls + " resize-none"} value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Résumé ou présentation du livre..." />
+              </div>
               <div className="flex gap-6 pt-1">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={form.isNew} onChange={() => toggle("isNew")} className="w-4 h-4 accent-amber-500" />

@@ -71,6 +71,7 @@ export async function createProduct(data: {
   isbn?: string;
   genre?: string;
   location?: string;
+  description?: string;
   isNew?: boolean;
   isCollection?: boolean;
   brand?: string;
@@ -98,6 +99,7 @@ export async function updateProduct(
     isbn: string;
     genre: string;
     location: string;
+    description: string;
     isNew: boolean;
     isCollection: boolean;
     brand: string;
