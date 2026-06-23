@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/storefront/Navbar";
 import { Footer } from "@/components/storefront/Footer";
+import { SocialSidebar } from "@/components/storefront/SocialSidebar";
 import type { ReactNode } from "react";
 
 export default function StoreLayout({
@@ -10,6 +11,7 @@ export default function StoreLayout({
   return (
     <div className="flex flex-col min-h-screen bg-white text-slate-900">
       <Navbar />
+      <SocialSidebar />
       <main className="flex-1">
         {children}
       </main>
