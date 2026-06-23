@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/storefront/Navbar";
 import { Footer } from "@/components/storefront/Footer";
 import { SocialSidebar } from "@/components/storefront/SocialSidebar";
+import { ChatWidget } from "@/components/storefront/ChatWidget";
 import type { ReactNode } from "react";
 
 export default function StoreLayout({
@@ -16,6 +17,7 @@ export default function StoreLayout({
         {children}
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   );
 }
