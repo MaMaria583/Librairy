@@ -50,7 +50,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4 uppercase text-sm tracking-wider">Suivez-nous</h3>
             <div className="flex gap-4">
-              <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all">
+              <a href="https://www.facebook.com/profile.php?id=61578883261940" target="_blank" rel="noopener noreferrer" className="bg-slate-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all">
                 <Facebook className="h-5 w-5" />
               </a>
               <a href="#" className="bg-slate-800 p-2 rounded-full hover:bg-pink-600 hover:text-white transition-all">
