@@ -20,12 +20,16 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  drawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -37,16 +41,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
-
-  const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.id === item.id);
-      if (existing) {
-        return prev.map((i) => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
-      }
-      return [...prev, { ...item, quantity: 1 }];
-    });
-  }, []);
 
   const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
@@ -61,12 +55,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearCart = useCallback(() => setItems([]), []);
+  const openDrawer = useCallback(() => setDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+
+  const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
+    setItems((prev) => {
+      const existing = prev.find((i) => i.id === item.id);
+      if (existing) {
+        return prev.map((i) => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+      }
+      return [...prev, { ...item, quantity: 1 }];
+    });
+    setDrawerOpen(true);
+  }, []);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQty, clearCart, totalItems, totalPrice, drawerOpen, openDrawer, closeDrawer }}>
       {children}
     </CartContext.Provider>
   );

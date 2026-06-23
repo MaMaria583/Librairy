@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, ArrowLeft, Star, Package } from "lucide-react";
+import { BookOpen, ArrowLeft, Star, Package, ShieldCheck, Zap, MessageCircle } from "lucide-react";
 import { AddToCartButton } from "@/components/storefront/AddToCartButton";
 import { formatPrice } from "@/lib/formatPrice";
 
@@ -21,6 +21,12 @@ export default async function LivreDetailPage({
   if (!book) notFound();
 
   const imageSrc = book.imageUrl || null;
+
+  const similarBooks = await prisma.product.findMany({
+    where: { type: "LIVRE", genre: book.genre ?? undefined, id: { not: book.id }, stock: { gt: 0 } },
+    take: 6,
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div className="min-h-screen">
@@ -93,7 +99,7 @@ export default async function LivreDetailPage({
               </div>
 
               {/* Action */}
-              <div className="mt-2">
+              <div className="mt-2 flex flex-col gap-3">
                 <AddToCartButton
                   id={book.id}
                   title={book.name}
@@ -101,6 +107,19 @@ export default async function LivreDetailPage({
                   price={book.sellPrice}
                   imageUrl={book.imageUrl}
                 />
+
+                {/* Trust badges */}
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <span className="flex items-center gap-1.5 text-xs text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                    <ShieldCheck className="w-3.5 h-3.5" /> Paiement sécurisé
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-full">
+                    <Zap className="w-3.5 h-3.5" /> Livraison rapide Mali
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs text-sky-300 bg-sky-500/10 border border-sky-500/20 px-2.5 py-1 rounded-full">
+                    <MessageCircle className="w-3.5 h-3.5" /> Support WhatsApp
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -152,6 +171,31 @@ export default async function LivreDetailPage({
           </div>
         </div>
       </div>
+      {/* ── Vous aimerez aussi ──────────────────────────────── */}
+      {similarBooks.length > 0 && (
+        <div className="container mx-auto px-4 lg:px-8 pb-12 max-w-5xl">
+          <h2 className="text-lg font-bold text-[#1e3a5f] mb-5 pb-2 border-b border-slate-100">
+            Vous aimerez aussi
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {similarBooks.map((s) => (
+              <Link key={s.id} href={`/livres/${s.id}`} className="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-100 hover:shadow-md transition-shadow">
+                <div className="relative aspect-[2/3] bg-slate-100 overflow-hidden">
+                  {s.imageUrl ? (
+                    <Image src={s.imageUrl} alt={s.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="160px" />
+                  ) : (
+                    <div className="flex items-center justify-center h-full"><BookOpen className="w-6 h-6 text-slate-300" /></div>
+                  )}
+                </div>
+                <div className="p-2">
+                  <p className="text-xs font-semibold text-slate-800 line-clamp-2 leading-snug mb-1">{s.name}</p>
+                  <p className="text-xs font-bold text-[#1e3a5f]">{formatPrice(s.sellPrice)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

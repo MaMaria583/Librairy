@@ -7,12 +7,13 @@ import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, LogOut, ChevronDown } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { useCart } from "@/contexts/CartContext";
+import { CartDrawer } from "@/components/storefront/CartDrawer";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const { data: session } = useSession();
-  const { totalItems } = useCart();
+  const { totalItems, openDrawer } = useCart();
   const router = useRouter();
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
@@ -22,6 +23,7 @@ export function Navbar() {
   }
 
   return (
+    <>
     <header className="sticky top-0 z-50 w-full bg-[#1e3a5f] text-white shadow-md">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
@@ -90,13 +92,13 @@ export function Navbar() {
                 <span>Compte</span>
               </Link>
             )}
-            <Link href="/panier" className="relative flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
+            <button onClick={openDrawer} className="relative flex items-center gap-1.5 text-white/80 hover:text-white transition-colors text-sm">
               <ShoppingCart className="h-5 w-5" />
               <span className="hidden lg:inline">Panier</span>
               {totalItems > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-[#c0392b] text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{totalItems > 9 ? "9+" : totalItems}</span>
               )}
-            </Link>
+            </button>
             <button className="lg:hidden p-1.5" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -116,5 +118,7 @@ export function Navbar() {
         </div>
       )}
     </header>
+    <CartDrawer />
+    </>
   );
 }
