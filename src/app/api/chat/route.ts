@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-
 const SYSTEM_PROMPT = `Tu es l'assistant virtuel de DAR ELHIKMA, une librairie et papeterie en ligne basée au Mali (Bamako).
 Ton rôle est d'aider les clients avec :
 - Trouver des livres (romans, BD, mangas, développement personnel, livres islamiques, jeunesse, art, éducation)
@@ -33,8 +31,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Clé API manquante" }, { status: 500 });
     }
 
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
     const completion = await groq.chat.completions.create({
-      model: "llama3-8b-8192",
+      model: "llama-3.1-8b-instant",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...messages,
@@ -46,7 +46,8 @@ export async function POST(req: NextRequest) {
     const reply = completion.choices[0]?.message?.content ?? "Désolé, je n'ai pas pu répondre.";
     return NextResponse.json({ reply });
   } catch (error) {
-    console.error("Chat error:", error);
-    return NextResponse.json({ error: "Erreur de connexion à l'IA." }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Chat error:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
