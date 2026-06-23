@@ -15,7 +15,8 @@ export function Footer() {
                 alt="DAR ELHIKMA"
                 width={160}
                 height={50}
-                className="object-contain brightness-0 invert"
+                className="object-contain"
+                style={{ mixBlendMode: "screen" }}
               />
             </Link>
             <p className="text-sm text-slate-400">
