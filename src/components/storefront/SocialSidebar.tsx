@@ -16,7 +16,7 @@ export function SocialSidebar() {
       </a>
 
       <a
-        href="https://www.tiktok.com/@librairie_darelhikma"
+        href="https://www.tiktok.com/@librairie_darelhi"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center justify-center w-10 h-10 bg-black text-white hover:w-14 transition-all duration-300"
