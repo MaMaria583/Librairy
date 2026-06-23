@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { Search, User, ShoppingCart, Menu, X, LogOut, ChevronDown } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
@@ -15,6 +15,14 @@ export function Navbar() {
   const { data: session } = useSession();
   const { totalItems, openDrawer } = useCart();
   const router = useRouter();
+  const pathname = usePathname();
+
+  function navClass(href: string) {
+    const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+    return active
+      ? "text-white font-semibold border-b-2 border-white pb-0.5"
+      : "text-white/75 hover:text-white transition-colors";
+  }
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,11 +51,11 @@ export function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="text-white font-semibold border-b-2 border-white pb-0.5">Accueil</Link>
-            <Link href="/livres" className="text-white/75 hover:text-white transition-colors">Mes livres</Link>
-            <Link href="/nouveautes" className="text-white/75 hover:text-white transition-colors">Nouveautés</Link>
-            <Link href="/collections" className="text-white/75 hover:text-white transition-colors">Collections</Link>
-            <Link href="/abonnements" className="text-white/75 hover:text-white transition-colors">Abonnements</Link>
+            <Link href="/" className={navClass("/")}>Accueil</Link>
+            <Link href="/livres" className={navClass("/livres")}>Les livres</Link>
+            <Link href="/nouveautes" className={navClass("/nouveautes")}>Nouveautés</Link>
+            <Link href="/collections" className={navClass("/collections")}>Collections</Link>
+            <Link href="/abonnements" className={navClass("/abonnements")}>Abonnements</Link>
           </nav>
 
           {/* Search + Icons */}
