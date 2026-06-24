@@ -150,17 +150,6 @@ export async function confirmOrderPayment(orderId: string, transactionRef: strin
   return { order: updatedOrder, paidAt };
 }
 
-// ── Trouve la dernière commande PENDING d'un numéro de téléphone ────────────
-export async function findPendingOrderByPhone(rawPhone: string) {
-  const normalized = normalizePhone(rawPhone);
-  const pending = await prisma.order.findMany({
-    where: { status: "PENDING" },
-    orderBy: { createdAt: "desc" },
-    take: 20,
-    include: { items: { include: { product: true } } },
-  });
-  return pending.find((o) => normalizePhone(o.customerPhone) === normalized) ?? null;
-}
 
 export async function getOrderStats() {
   const [pending, paid, shipped, delivered, cancelled] = await Promise.all([
