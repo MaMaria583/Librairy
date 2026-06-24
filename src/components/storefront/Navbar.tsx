@@ -56,6 +56,7 @@ export function Navbar() {
             <Link href="/nouveautes" className={navClass("/nouveautes")}>Nouveautés</Link>
             <Link href="/collections" className={navClass("/collections")}>Collections</Link>
             <Link href="/abonnements" className={navClass("/abonnements")}>Abonnements</Link>
+            <Link href="/suivi-commande" className={navClass("/suivi-commande")}>Suivi commande</Link>
           </nav>
 
           {/* Search + Icons */}
@@ -122,6 +123,7 @@ export function Navbar() {
             <Link href="/livres" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Nouveautés</Link>
             <Link href="/livres?rayon=litterature" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Collections</Link>
             <Link href="/livres?rayon=jeunesse" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Abonnements</Link>
+            <Link href="/suivi-commande" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Suivi commande</Link>
           </nav>
         </div>
       )}
