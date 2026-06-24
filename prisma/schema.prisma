@@ -121,6 +121,8 @@ model Order {
   paymentMethod   String
   total           Float
   notes           String?
+  transactionRef  String?
+  paidAt          DateTime?
   items           OrderItem[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt

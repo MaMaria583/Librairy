@@ -1,9 +1,10 @@
 "use client";
 
-import { X, MessageCircle, Smartphone, CheckCircle, Loader2, User, Phone, MapPin, PackageCheck } from "lucide-react";
+import { X, MessageCircle, Smartphone, CheckCircle, Loader2, User, Phone, MapPin, PackageCheck, CreditCard } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
 
 const WHATSAPP_NUMBER = "22394664694";
@@ -294,8 +295,19 @@ export function CheckoutModal({ onClose }: Props) {
               <p className="text-sm text-slate-500 mt-1">Référence : <span className="font-mono font-bold text-[#1e3a5f]">{orderId.slice(0, 12).toUpperCase()}</span></p>
             </div>
             <p className="text-sm text-slate-600">
-              Notre équipe va traiter votre commande. Vous serez contacté(e) au <strong>{form.phone}</strong> pour confirmer la livraison.
+              Votre commande est enregistrée. Payez maintenant via Mobile Money puis confirmez votre paiement ci-dessous.
             </p>
+
+            {/* Étape suivante : confirmer le paiement */}
+            <Link
+              href={`/confirmer-paiement?ref=${orderId}`}
+              onClick={handleConfirmed}
+              className="flex items-center justify-center gap-2 w-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold py-3 rounded-xl transition-colors"
+            >
+              <CreditCard className="w-4 h-4" />
+              Confirmer mon paiement Mobile Money
+            </Link>
+
             <a
               href={buildWhatsapp(orderId)}
               target="_blank"
