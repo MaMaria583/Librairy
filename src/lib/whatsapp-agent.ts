@@ -10,7 +10,7 @@
 import Groq from "groq-sdk";
 import { prisma } from "@/lib/prisma";
 import { confirmOrderPayment, findPendingOrderByPhone } from "@/lib/actions/orders";
-import { sendTextMessage, delay } from "@/lib/whatsapp-api";
+import { sendTextMessage, sendInteractiveButtons, sendTypingIndicator, delay } from "@/lib/whatsapp-api";
 import { formatPrice } from "@/lib/formatPrice";
 
 const WA_PHONE = "+22394664694";
@@ -31,6 +31,12 @@ function isTransactionRef(text: string): boolean {
   );
 }
 
+// IDs des boutons interactifs
+const BTN_PAID = "btn_paid";
+const BTN_CANCEL = "btn_cancel";
+const BTN_HELP = "btn_help";
+const BTN_CONFIRM_DELIVERY = "btn_confirm_delivery";
+
 // ── Dispatcher principal ────────────────────────────────────────────────────
 export async function handleIncomingMessage(opts: {
   from: string;
@@ -42,28 +48,77 @@ export async function handleIncomingMessage(opts: {
   const { from, messageType, text, messageId, imageCaption } = opts;
   const content = text || imageCaption || "";
 
-  // 1. Message d'ordre venant de notre site
+  // Indicateur de frappe immédiat ("typing...")
+  sendTypingIndicator(from, messageId).catch(() => {});
+  await delay(800);
+
+  // 1. Bouton interactif appuyé
+  if (messageType === "interactive") {
+    await handleButtonReply(from, content, messageId);
+    return;
+  }
+
+  // 2. Message d'ordre venant de notre site (contient réf. commande)
   const orderId = extractOrderId(content);
   if (orderId) {
     await handleOrderConfirmation(from, orderId);
     return;
   }
 
-  // 2. Image = capture d'écran de paiement
+  // 3. Image = capture d'écran de paiement
   if (messageType === "image") {
     const txnRef = imageCaption?.trim() || `WA_IMG_${messageId}`;
     await handlePaymentProof(from, txnRef);
     return;
   }
 
-  // 3. Texte = numéro de transaction Mobile Money
+  // 4. Texte = numéro de transaction Mobile Money
   if (messageType === "text" && isTransactionRef(content)) {
     await handlePaymentProof(from, content.trim());
     return;
   }
 
-  // 4. Message général → assistant IA
+  // 5. Message général → assistant IA
   await handleGeneralMessage(from, content);
+}
+
+// ── Cas 0 : bouton interactif appuyé ────────────────────────────────────────
+async function handleButtonReply(from: string, rawText: string, messageId: string): Promise<void> {
+  // Le payload rawText pour interactive = l'ID du bouton (passé depuis webhook)
+  const btnId = rawText;
+
+  if (btnId === BTN_PAID) {
+    // Client dit "J'ai payé" → on cherche sa commande et on confirme
+    await handlePaymentProof(from, `WA_BTN_${messageId}`);
+    return;
+  }
+
+  if (btnId === BTN_CANCEL) {
+    await sendTextMessage(
+      from,
+      `D'accord, votre commande reste en attente. Si vous changez d'avis, revenez vers nous ou visitez notre site. — DAR ELHIKMA 📚`
+    );
+    return;
+  }
+
+  if (btnId === BTN_CONFIRM_DELIVERY) {
+    await sendTextMessage(
+      from,
+      `🎉 Merci pour votre confiance ! Votre commande est marquée comme livrée. À très bientôt chez DAR ELHIKMA 📚`
+    );
+    return;
+  }
+
+  if (btnId === BTN_HELP) {
+    await sendTextMessage(
+      from,
+      `Bien sûr ! Notre équipe est disponible pour vous aider. Contactez-nous directement au +22394664694 ou décrivez votre problème ci-dessous.`
+    );
+    return;
+  }
+
+  // Bouton inconnu → message général
+  await handleGeneralMessage(from, rawText);
 }
 
 // ── Cas 1 : message d'ordre ─────────────────────────────────────────────────
@@ -92,13 +147,18 @@ async function handleOrderConfirmation(from: string, orderId: string): Promise<v
 
   const itemsList = order.items.map((i) => `• ${i.product.name} ×${i.quantity}`).join("\n");
 
-  await sendTextMessage(
-    from,
+  const body =
     `✅ *Commande validée !*\n\n${itemsList}\n\n💰 Total : *${formatPrice(order.total)}*\n\n` +
     `Merci d'envoyer cette somme via Mobile Money au numéro :\n\n` +
     `📱 *${WA_PHONE}*\n\n` +
-    `Une fois le paiement effectué, renvoyez-nous la *capture d'écran* ou le *numéro de transaction*. 📸`
-  );
+    `Une fois payé, appuyez sur « J'ai payé » ou envoyez la capture d'écran. 📸`;
+
+  // Envoyer avec boutons interactifs (meilleure UX que texte libre)
+  await sendInteractiveButtons(from, body, [
+    { id: BTN_PAID, title: "✅ J'ai payé" },
+    { id: BTN_CANCEL, title: "❌ Annuler" },
+    { id: BTN_HELP, title: "� Besoin d'aide" },
+  ]);
 }
 
 // ── Cas 2 : preuve de paiement (image ou ref texte) ─────────────────────────
@@ -129,9 +189,11 @@ async function handlePaymentProof(from: string, txnRef: string): Promise<void> {
 
   await delay(2500);
 
-  await sendTextMessage(
+  // Message de livraison avec bouton de confirmation
+  await sendInteractiveButtons(
     from,
-    `🚚 *Le livreur vous contactera dans peu de temps* pour organiser la livraison.\n\nMerci de votre confiance — *DAR ELHIKMA* 📚`
+    `🚚 *Le livreur vous contactera dans peu de temps* pour organiser la livraison à votre adresse.\n\nMerci de votre confiance — *DAR ELHIKMA* 📚`,
+    [{ id: BTN_CONFIRM_DELIVERY, title: "📦 Commande reçue" }]
   );
 }
 

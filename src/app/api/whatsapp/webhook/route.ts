@@ -11,6 +11,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { createHmac } from "crypto";
 import { handleIncomingMessage } from "@/lib/whatsapp-agent";
 import { markAsRead } from "@/lib/whatsapp-api";
 
@@ -33,7 +34,22 @@ export async function GET(req: NextRequest) {
 // ── Réception des messages ───────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const rawBody = await req.text();
+
+    // ── Vérification HMAC-SHA256 (technique de Jasper's Market) ─────────────
+    // WHATSAPP_APP_SECRET = App Secret de votre app Meta Developer Console
+    // Protège contre les faux appels non issus de Meta
+    const appSecret = process.env.WHATSAPP_APP_SECRET;
+    if (appSecret) {
+      const signature = req.headers.get("x-hub-signature-256") ?? "";
+      const expectedHash = createHmac("sha256", appSecret).update(rawBody).digest("hex");
+      if (signature !== `sha256=${expectedHash}`) {
+        console.warn("[WhatsApp Webhook] ❌ Signature invalide — rejeté");
+        return new Response("Unauthorized", { status: 401 });
+      }
+    }
+
+    const body = JSON.parse(rawBody);
 
     // Meta exige une réponse 200 immédiate — traitement asynchrone
     processWebhook(body).catch((err) =>
@@ -62,6 +78,10 @@ async function processWebhook(body: unknown): Promise<void> {
             timestamp: string;
             text?: { body: string };
             image?: { caption?: string; id: string; mime_type: string };
+            interactive?: {
+              type: string;
+              button_reply?: { id: string; title: string };
+            };
           }>;
         };
       }>;
@@ -79,13 +99,19 @@ async function processWebhook(body: unknown): Promise<void> {
         const ageSeconds = Math.floor(Date.now() / 1000) - parseInt(msg.timestamp);
         if (ageSeconds > 60) continue;
 
-        // Marquer comme lu
+        // Marquer comme lu (le typing indicator dans l'agent gère le cas interactif)
         markAsRead(msg.id).catch(() => {});
+
+        // Extraire le contenu selon le type
+        let msgText = msg.text?.body ?? "";
+        if (msg.type === "interactive" && msg.interactive?.button_reply) {
+          msgText = msg.interactive.button_reply.id;
+        }
 
         await handleIncomingMessage({
           from: msg.from,
           messageType: msg.type,
-          text: msg.text?.body ?? "",
+          text: msgText,
           messageId: msg.id,
           imageCaption: msg.image?.caption,
         });
