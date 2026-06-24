@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { PaymentMethod } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { revalidateStorefront } from "@/lib/revalidateStorefront";
 
 export type CartItem = {
   productId: string;
@@ -70,6 +71,7 @@ export async function createSale(data: {
   revalidatePath("/ventes");
   revalidatePath("/stock/livres");
   revalidatePath("/stock/fournitures");
+  revalidateStorefront();
 
   return sale;
 }

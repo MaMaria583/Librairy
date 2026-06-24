@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { revalidateStorefront } from "@/lib/revalidateStorefront";
 
 export async function PATCH(
   req: NextRequest,
@@ -64,6 +65,7 @@ export async function PATCH(
       revalidatePath("/stock/livres");
       revalidatePath("/stock/fournitures");
       revalidatePath("/dashboard");
+      revalidateStorefront();
 
       return NextResponse.json({ order: updated, stockDecremented: true });
     }
@@ -90,6 +92,7 @@ export async function PATCH(
       revalidatePath("/commandes");
       revalidatePath("/stock/livres");
       revalidatePath("/dashboard");
+      revalidateStorefront();
 
       return NextResponse.json({ order: updated, stockRestored: true });
     }

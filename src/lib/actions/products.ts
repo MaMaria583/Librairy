@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { ProductType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { revalidateStorefront } from "@/lib/revalidateStorefront";
 
 export async function getProducts(type?: ProductType) {
   return prisma.product.findMany({
@@ -81,6 +82,7 @@ export async function createProduct(data: {
   const product = await prisma.product.create({ data });
   revalidatePath("/stock/livres");
   revalidatePath("/stock/fournitures");
+  revalidateStorefront();
   return product;
 }
 
@@ -110,6 +112,7 @@ export async function updateProduct(
   const product = await prisma.product.update({ where: { id }, data });
   revalidatePath("/stock/livres");
   revalidatePath("/stock/fournitures");
+  revalidateStorefront();
   return product;
 }
 
@@ -117,6 +120,7 @@ export async function deleteProduct(id: string) {
   await prisma.product.delete({ where: { id } });
   revalidatePath("/stock/livres");
   revalidatePath("/stock/fournitures");
+  revalidateStorefront();
 }
 
 export async function getTopProducts(limit = 10) {

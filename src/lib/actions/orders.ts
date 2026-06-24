@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { revalidateStorefront } from "@/lib/revalidateStorefront";
 import { notifyNewPayment } from "@/lib/notifications";
 
 export async function getOrders(status?: OrderStatus) {
@@ -54,6 +55,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
     revalidatePath("/commandes");
     revalidatePath("/stock/livres");
     revalidatePath("/dashboard");
+    revalidateStorefront();
     return updated;
   }
 
@@ -75,6 +77,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
     revalidatePath("/commandes");
     revalidatePath("/stock/livres");
     revalidatePath("/dashboard");
+    revalidateStorefront();
     return updated;
   }
 
@@ -134,6 +137,7 @@ export async function confirmOrderPayment(orderId: string, transactionRef: strin
   revalidatePath("/commandes");
   revalidatePath("/stock/livres");
   revalidatePath("/dashboard");
+  revalidateStorefront();
 
   notifyNewPayment({
     orderId: order.id,
