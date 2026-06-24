@@ -1,23 +1,24 @@
 /**
- * WhatsApp API — Double fournisseur
+ * WhatsApp API — Triple fournisseur
  *
- * WHATSAPP_PROVIDER=META     → Meta WhatsApp Business Cloud API (nouveau numéro requis)
- * WHATSAPP_PROVIDER=ULTRAMSG → UltraMsg (fonctionne avec un numéro WhatsApp Business existant)
+ * WHATSAPP_PROVIDER=GREENAPI  → Green API (plan gratuit, numéro existant) ← RECOMMANDÉ
+ * WHATSAPP_PROVIDER=ULTRAMSG  → UltraMsg  (essai 3 jours, numéro existant)
+ * WHATSAPP_PROVIDER=META      → Meta Cloud API (nouveau numéro dédié requis)
  *
- * Variables Meta  : WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_ACCESS_TOKEN
- * Variables UltraMsg : ULTRAMSG_INSTANCE_ID, ULTRAMSG_TOKEN
+ * Variables Green API : GREENAPI_INSTANCE_ID, GREENAPI_TOKEN, GREENAPI_API_URL
+ * Variables UltraMsg  : ULTRAMSG_INSTANCE_ID, ULTRAMSG_TOKEN
+ * Variables Meta      : WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_ACCESS_TOKEN
  */
 
 // ── Détection du fournisseur actif ──────────────────────────────────────────
-function getProvider(): "META" | "ULTRAMSG" | null {
+function getProvider(): "META" | "ULTRAMSG" | "GREENAPI" | null {
   const p = (process.env.WHATSAPP_PROVIDER ?? "").toUpperCase();
+  if (p === "GREENAPI") return "GREENAPI";
   if (p === "ULTRAMSG") return "ULTRAMSG";
-  if (
-    process.env.ULTRAMSG_INSTANCE_ID &&
-    process.env.ULTRAMSG_TOKEN &&
-    !process.env.WHATSAPP_PHONE_NUMBER_ID
-  )
-    return "ULTRAMSG";
+  if (p === "META") return "META";
+  // Auto-détection si WHATSAPP_PROVIDER non défini
+  if (process.env.GREENAPI_INSTANCE_ID && process.env.GREENAPI_TOKEN) return "GREENAPI";
+  if (process.env.ULTRAMSG_INSTANCE_ID && process.env.ULTRAMSG_TOKEN) return "ULTRAMSG";
   if (process.env.WHATSAPP_PHONE_NUMBER_ID && process.env.WHATSAPP_ACCESS_TOKEN) return "META";
   return null;
 }
@@ -33,25 +34,22 @@ export async function sendTextMessage(to: string, body: string): Promise<void> {
   const phone = normalizeWaPhone(to);
   const provider = getProvider();
 
+  if (provider === "GREENAPI") {
+    await greenApiSend("sendMessage", { chatId: `${phone}@c.us`, message: body });
+    return;
+  }
+
   if (provider === "ULTRAMSG") {
-    await ultraMsgSend(`/messages/chat`, {
-      to: phone,
-      body,
-      priority: "10",
-    });
+    await ultraMsgSend(`/messages/chat`, { to: phone, body, priority: "10" });
     return;
   }
 
   if (provider === "META") {
-    await metaSend({
-      to: phone,
-      type: "text",
-      text: { preview_url: false, body },
-    });
+    await metaSend({ to: phone, type: "text", text: { preview_url: false, body } });
     return;
   }
 
-  console.warn("[WhatsApp] Aucun fournisseur configuré. Définissez WHATSAPP_PROVIDER=ULTRAMSG ou META.");
+  console.warn("[WhatsApp] Aucun fournisseur configuré. Définissez WHATSAPP_PROVIDER=GREENAPI | ULTRAMSG | META.");
 }
 
 // ── Indicateur de frappe ─────────────────────────────────────────────────────
@@ -100,17 +98,18 @@ export async function sendInteractiveButtons(
   const phone = normalizeWaPhone(to);
   const provider = getProvider();
 
-  if (provider === "ULTRAMSG") {
-    // Fallback texte : affiche les options sous forme de liste
+  // Green API et UltraMsg : pas de boutons natifs → fallback texte numéroté
+  if (provider === "GREENAPI" || provider === "ULTRAMSG") {
     const optionsList = buttons
       .slice(0, 3)
       .map((b, i) => `${i + 1}. ${b.title}`)
       .join("\n");
-    await ultraMsgSend(`/messages/chat`, {
-      to: phone,
-      body: `${bodyText}\n\n${optionsList}\n\n_(Répondez avec le numéro de votre choix)_`,
-      priority: "10",
-    });
+    const fullText = `${bodyText}\n\n${optionsList}\n\n_(Répondez avec le numéro de votre choix)_`;
+    if (provider === "GREENAPI") {
+      await greenApiSend("sendMessage", { chatId: `${phone}@c.us`, message: fullText });
+    } else {
+      await ultraMsgSend(`/messages/chat`, { to: phone, body: fullText, priority: "10" });
+    }
     return;
   }
 
@@ -162,6 +161,29 @@ async function metaSend(payload: Record<string, unknown>): Promise<void> {
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     console.error("[WhatsApp/Meta] API error:", JSON.stringify(err));
+  }
+}
+
+// ── Internals : Green API ────────────────────────────────────────────────────
+async function greenApiSend(
+  method: string,
+  body: Record<string, unknown>
+): Promise<void> {
+  const idInstance = process.env.GREENAPI_INSTANCE_ID;
+  const token = process.env.GREENAPI_TOKEN;
+  const apiUrl = process.env.GREENAPI_API_URL ?? "https://api.green-api.com";
+  if (!idInstance || !token) {
+    console.warn("[WhatsApp/GreenAPI] GREENAPI_INSTANCE_ID ou GREENAPI_TOKEN manquant");
+    return;
+  }
+  const res = await fetch(`${apiUrl}/waInstance${idInstance}/${method}/${token}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.text().catch(() => "");
+    console.error("[WhatsApp/GreenAPI] API error:", err);
   }
 }
 
