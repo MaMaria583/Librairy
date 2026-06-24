@@ -25,7 +25,6 @@ export default async function LivresPage({
     autres: "autres",
     education: "éducation",
     "livres-islamiques": "islamique",
-    "jeux-enfants": "jeux",
   };
 
   if (rayon && RAYONS[rayon]) {
@@ -56,7 +55,6 @@ export default async function LivresPage({
                 { slug: "art", label: "Livre Art" },
                 { slug: "education", label: "Livre Éducation" },
                 { slug: "livres-islamiques", label: "Livres islamiques" },
-                { slug: "jeux-enfants", label: "Jeux pour enfants" },
                 { slug: "autres", label: "Autres Livres" },
               ].map(({ slug, label }) => (
                 <li key={slug}>
