@@ -53,6 +53,7 @@ export function Navbar() {
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             <Link href="/" className={navClass("/")}>Accueil</Link>
             <Link href="/livres" className={navClass("/livres")}>Les livres</Link>
+            <Link href="/fournitures" className={navClass("/fournitures")}>Les fournitures</Link>
             <Link href="/nouveautes" className={navClass("/nouveautes")}>Nouveautés</Link>
             <Link href="/collections" className={navClass("/collections")}>Collections</Link>
             <Link href="/abonnements" className={navClass("/abonnements")}>Abonnements</Link>
@@ -121,6 +122,7 @@ export function Navbar() {
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-2 text-sm font-medium">
             <Link href="/" className="py-2 text-white" onClick={() => setMobileOpen(false)}>Accueil</Link>
             <Link href="/livres" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Nouveautés</Link>
+            <Link href="/fournitures" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Les fournitures</Link>
             <Link href="/livres?rayon=litterature" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Collections</Link>
             <Link href="/livres?rayon=jeunesse" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Abonnements</Link>
             <Link href="/suivi-commande" className="py-2 text-white/75" onClick={() => setMobileOpen(false)}>Suivi commande</Link>
