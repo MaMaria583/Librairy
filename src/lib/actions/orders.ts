@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { notifyNewPayment } from "@/lib/notifications";
 
 export async function getOrders(status?: OrderStatus) {
   return prisma.order.findMany({
@@ -84,6 +85,81 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
   });
   revalidatePath("/commandes");
   return updated;
+}
+
+// ── Normalise un numéro de téléphone pour la comparaison ───────────────────
+function normalizePhone(phone: string): string {
+  return phone.replace(/[\s+\-()]/g, "");
+}
+
+// ── Confirme le paiement d'une commande (utilisé par API + agent WhatsApp) ──
+export async function confirmOrderPayment(orderId: string, transactionRef: string) {
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { items: { include: { product: true } } },
+  });
+
+  if (!order) throw new Error("Commande introuvable.");
+
+  if (["PAID", "SHIPPED", "DELIVERED"].includes(order.status)) {
+    throw new Error("ALREADY_PAID");
+  }
+  if (order.status === "CANCELLED") throw new Error("CANCELLED");
+
+  for (const item of order.items) {
+    if (item.product.stock < item.quantity) {
+      throw new Error(
+        `Stock insuffisant pour "${item.product.name}" (dispo: ${item.product.stock})`
+      );
+    }
+  }
+
+  const paidAt = new Date();
+
+  const updatedOrder = await prisma.$transaction(async (tx) => {
+    const updated = await tx.order.update({
+      where: { id: order.id },
+      data: { status: "PAID", transactionRef: transactionRef.trim(), paidAt },
+      include: { items: { include: { product: true } } },
+    });
+    for (const item of order.items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+    }
+    return updated;
+  });
+
+  revalidatePath("/commandes");
+  revalidatePath("/stock/livres");
+  revalidatePath("/dashboard");
+
+  notifyNewPayment({
+    orderId: order.id,
+    customerName: order.customerName,
+    customerPhone: order.customerPhone,
+    customerAddress: order.customerAddress,
+    paymentMethod: order.paymentMethod,
+    transactionRef: transactionRef.trim(),
+    total: order.total,
+    items: updatedOrder.items,
+    paidAt,
+  }).catch((err) => console.error("[confirmOrderPayment] Notification error:", err));
+
+  return { order: updatedOrder, paidAt };
+}
+
+// ── Trouve la dernière commande PENDING d'un numéro de téléphone ────────────
+export async function findPendingOrderByPhone(rawPhone: string) {
+  const normalized = normalizePhone(rawPhone);
+  const pending = await prisma.order.findMany({
+    where: { status: "PENDING" },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+    include: { items: { include: { product: true } } },
+  });
+  return pending.find((o) => normalizePhone(o.customerPhone) === normalized) ?? null;
 }
 
 export async function getOrderStats() {
