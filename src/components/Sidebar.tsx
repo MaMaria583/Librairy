@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight,
   AlertTriangle,
+  ShoppingBag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,6 +44,11 @@ const navItems: NavItem[] = [
       { label: "Livres", href: "/stock/livres", icon: BookOpen },
       { label: "Fournitures", href: "/stock/fournitures", icon: Package },
     ],
+  },
+  {
+    label: "Commandes en ligne",
+    href: "/commandes",
+    icon: ShoppingBag,
   },
   {
     label: "Ventes",

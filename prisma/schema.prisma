@@ -19,6 +19,14 @@ enum PaymentMethod {
   CHEQUE
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model Supplier {
   id        String    @id @default(cuid())
   name      String
@@ -64,6 +72,7 @@ model Product {
   isCollection  Boolean     @default(false)
 
   saleItems     SaleItem[]
+  orderItems    OrderItem[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -101,6 +110,31 @@ model User {
   password      String
   createdAt     DateTime          @default(now())
   subscriptions UserSubscription[]
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  status          OrderStatus @default(PENDING)
+  customerName    String
+  customerPhone   String
+  customerAddress String?
+  paymentMethod   String
+  total           Float
+  notes           String?
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Float
+  subtotal  Float
 }
 
 model UserSubscription {
