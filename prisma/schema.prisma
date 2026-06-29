@@ -92,15 +92,16 @@ model Sale {
 }
 
 model SaleItem {
-  id         String   @id @default(cuid())
-  saleId     String
-  sale       Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  productId  String
-  product    Product  @relation(fields: [productId], references: [id])
-  quantity   Int
-  unitPrice  Float
-  discount   Float    @default(0)
-  subtotal   Float
+  id            String   @id @default(cuid())
+  saleId        String
+  sale          Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id])
+  quantity      Int
+  unitPrice     Float
+  unitCostPrice Float    @default(0)
+  discount      Float    @default(0)
+  subtotal      Float
 }
 
 model User {

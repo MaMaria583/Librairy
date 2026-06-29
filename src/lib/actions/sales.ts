@@ -10,6 +10,7 @@ export type CartItem = {
   productName: string;
   quantity: number;
   unitPrice: number;
+  unitCostPrice: number;
   discount: number;
 };
 
@@ -48,6 +49,7 @@ export async function createSale(data: {
             productId: item.productId,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
+            unitCostPrice: item.unitCostPrice ?? 0,
             discount: item.discount,
             subtotal: item.quantity * item.unitPrice * (1 - item.discount / 100),
           })),
@@ -108,7 +110,8 @@ export async function getDashboardStats() {
   });
 
   const monthCost = allSaleItems.reduce(
-    (s, item) => s + item.product.buyPrice * item.quantity,
+    (s, item) =>
+      s + (item.unitCostPrice > 0 ? item.unitCostPrice : item.product.buyPrice) * item.quantity,
     0
   );
   const monthProfit = monthRevenue - monthCost;

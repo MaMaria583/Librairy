@@ -105,6 +105,7 @@ export function POSClient({ products }: Props) {
           productName: item.product.name,
           quantity: item.quantity,
           unitPrice: item.product.sellPrice,
+          unitCostPrice: item.product.buyPrice,
           discount: item.discount,
         })),
         paymentMethod,
